@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<a id="myTitle">{{.Title}}</a>
+<form method="post" action="/login">
+    <table>
+        <div>
+            <input id="myUserName" type="text" autocomplete="off" placeholder="用户名" name="username" required/>
+        </div>
+
+        <div>
+            <input id="myPassword" type="password" autocomplete="off" placeholder="登录密码" name="password" required
+                   maxlength="32"/>
+        </div>
+
+        <button id="myButton" type="submit">登录</button>
+    </table>
+</form>
+</body>
+</html>

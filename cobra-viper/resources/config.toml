@@ -1,0 +1,6 @@
+# This is a TOML document.
+
+# dev(debug) config.2
+[base]
+author = "dongtech"
+age = 24

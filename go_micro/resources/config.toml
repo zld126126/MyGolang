@@ -1,0 +1,26 @@
+# This is a TOML document.
+[base]
+author = "dongtech"
+age = 24
+
+[database]
+user = "dongbao"
+password = "123456"
+addr = "127.0.0.1"
+database = "dongbao"
+poolSize = 20 #db default 20
+slow = 50 #单位：ms
+port = 5432
+
+[userService]
+addr = "127.0.0.1:10086"
+
+[web]
+addr = "9090"
+
+[email]
+host = "smtp.sina.com"
+port = 465
+username = "1234567890abcdef@sina.com"
+#从sina获取的密钥
+password = "1234567890abcdef"

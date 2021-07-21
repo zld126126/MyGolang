@@ -1,0 +1,26 @@
+# This is a TOML document.
+[base]
+author = "dongtech"
+age = 24
+
+[database]
+user = "postgres"
+password = "root"
+addr = "127.0.0.1"
+database = "test"
+poolSize = 20 #db default 20
+slow = 50 #单位：ms
+port = 5432
+
+[grpc]
+addr = "10086"
+
+[web]
+addr = "9090"
+
+[email]
+host = "smtp.sina.com"
+port = 465
+username = "zld126126@sina.com"
+#从sina获取的密钥
+password = "1234567890abcdef"

@@ -1,0 +1,13 @@
+version: '2'
+
+networks:
+  basic:
+
+services:
+  landon_web:
+    container_name: landon_web
+    image: landon:v1
+    ports:
+      - "9090:9090"
+    networks:
+      - basic

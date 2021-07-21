@@ -1,0 +1,20 @@
+syntax = "proto3"; // 指定proto版本
+package service;     // 指定包名
+option go_package = "inf"; //指定goPackage
+import "google/protobuf/empty.proto"; //引入返回空内容
+
+//定义传输过程用到的数据类型,数字代表内部成员序号
+message UserReq {
+    int32 id = 1;
+}
+
+message UserResp {
+    string name = 1;
+    int64 time = 2;
+}
+
+//定义提供的服务
+service UserService{
+    rpc GetUser(UserReq) returns (UserResp);
+    rpc PushUser(UserReq) returns (google.protobuf.Empty);
+}

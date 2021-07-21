@@ -1,0 +1,35 @@
+syntax = "proto3"; // 指定proto版本
+package proto;     // 指定包名
+
+//定义传输过程用到的数据类型,数字代表内部成员序号
+message Name {
+    string name = 1;
+}
+
+message Id {
+    int32 id = 1;
+}
+
+
+message User {
+    string name = 1;
+    int64 time = 2;
+}
+
+message Activity {
+    string name = 1;
+    Tp tp = 2;
+}
+
+enum Tp {
+  Tp_UnKnown = 0;   //未知
+  Tp_NotStart = 1;  //未开始
+  Tp_Process = 2;   //进行中
+  Tp_End = 3;       //结束了
+}
+
+//定义提供的服务
+service ServeRoute{
+    rpc GetUser(Id) returns (User) {}
+    rpc GetActivity(Name) returns (Activity) {}
+}
