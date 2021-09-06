@@ -9,4 +9,6 @@ const (
 	ConfigVersionKey = `config_version` // 本地记录版本
 
 	FileMaxBytes = 1024 * 1024 * 2 // 最大文件容量
+
+	ManagerKey = `ManagerKey_%d` // 用户session key
 )

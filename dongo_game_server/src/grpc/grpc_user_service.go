@@ -22,7 +22,7 @@ func (p *Grpc_UserService) GetUser(c context.Context, req *inf.UserReq) (*inf.Us
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf("id:%d,get user err", req.Id))
 	}
-	return &inf.UserResp{Name: user.Name, Time: util.ParseTimeToInt64()}, nil
+	return &inf.UserResp{Name: user.Name, Time: util.Tick64()}, nil
 }
 
 func (p *Grpc_UserService) PushUser(context.Context, *inf.UserReq) (*empty.Empty, error) {

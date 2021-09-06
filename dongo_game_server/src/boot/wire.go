@@ -8,6 +8,7 @@ import (
 	"dongo_game_server/src/support"
 	"dongo_game_server/src/web"
 	"dongo_game_server/src/web/controller"
+	"dongo_game_server/src/web/service"
 
 	"github.com/google/wire"
 )
@@ -17,6 +18,7 @@ var configSet = wire.NewSet(
 	config.DefaultEmailConfig,
 	config.DefaultGrpcConfig,
 	config.Grpc_DefaultUserService,
+	config.DefaultMemory,
 )
 
 var webSet = wire.NewSet(
@@ -30,6 +32,8 @@ var webSet = wire.NewSet(
 	wire.Struct(new(controller.SocketHdl), "*"),
 	wire.Struct(new(controller.ToolHdl), "*"),
 	wire.Struct(new(controller.TrackHdl), "*"),
+
+	wire.Struct(new(service.ManagerService), "*"),
 )
 
 func InitWeb() (*web.WebApp, error) {

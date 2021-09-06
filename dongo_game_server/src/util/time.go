@@ -28,7 +28,7 @@ func ParseTimeByTimeStr(str, errPrefix string) (time.Time, error) {
 }
 
 //获取int64 当前时间戳/输入time时间戳
-func ParseTimeToInt64(t ...time.Time) int64 {
+func Tick64(t ...time.Time) int64 {
 	if len(t) == 0 {
 		return time.Now().UnixNano() / 1e6
 	} else {
@@ -37,12 +37,12 @@ func ParseTimeToInt64(t ...time.Time) int64 {
 }
 
 //获取int64 秒
-func ParseSecondTimeToInt64() int64 {
+func ParseSecondTime2Int64() int64 {
 	return time.Now().Unix()
 }
 
 //获取int64 小时
-func ParseHourTimeToInt64() int64 {
+func ParseHourTime2Int64() int64 {
 	return time.Now().Unix() / 3600 * 3600
 }
 
@@ -81,7 +81,7 @@ func ParseYesterdayTime(t ...time.Time) time.Time {
 }
 
 //把int64转换成1993-12-26 10:30:00
-func ParseTimeToTimeStr(intTime int64, strfmt ...string) string {
+func ParseTime2String(intTime int64, strfmt ...string) string {
 	t := time.Unix(intTime/1e3, 0)
 	defaultFmt := DateFormat
 	if len(strfmt) > 0 {
@@ -91,6 +91,6 @@ func ParseTimeToTimeStr(intTime int64, strfmt ...string) string {
 }
 
 //int64 to time
-func Int64ConvertToTime(intTime int64) time.Time {
+func Int64Convert2Time(intTime int64) time.Time {
 	return time.Unix(intTime/1e3, 0)
 }

@@ -112,6 +112,10 @@ func NewDatabase_Grpc(config *Config) *database.DB {
 	return db
 }
 
+func DefaultMemory(config *Config) *util.Memory {
+	return util.DefaultMemory(config.Base.ProjectName)
+}
+
 func DefaultGrpcConfig(config *Config) *GrpcConfig {
 	return config.Grpc
 }
@@ -121,9 +125,10 @@ func DefaultEmailConfig(config *Config) *EmailConfig {
 }
 
 type Base struct {
-	Author  string `json:"author"`
-	Age     int    `json:"age"`
-	Version string `json:"version"`
+	Author      string `json:"author"`
+	Age         int    `json:"age"`
+	Version     string `json:"version"`
+	ProjectName string `json:"projectName"`
 }
 
 type GrpcConfig struct {

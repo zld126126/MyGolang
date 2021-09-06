@@ -3,7 +3,6 @@ package web
 import (
 	"dongo_game_server/service/inf"
 	"dongo_game_server/src/config"
-	"dongo_game_server/src/database"
 	"dongo_game_server/src/util"
 	"dongo_game_server/src/web/controller"
 	"fmt"
@@ -15,7 +14,7 @@ import (
 type WebApp struct {
 	Config      *config.Config
 	UserService inf.UserServiceClient
-	DB          *database.DB
+	Memory      *util.Memory
 
 	Base     *controller.BaseHdl
 	Captcha  *controller.CaptchaHdl
@@ -48,6 +47,20 @@ func (p *WebApp) Start() {
 func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/version", p.Base.GetVersion())
 	routerGroup.GET("/grpc/user/:user_id", p.RPC.GetGrpcUser)
+
+	manager := routerGroup.Group("/manager")
+	{
+		manager.POST("/create", p.Manager.Create)
+		manager.POST("/login", p.Manager.Login)
+		manager.POST("/logout ", p.Manager.Logout)
+		manager.GET("/list", p.Manager.List)
+		m := manager.Group("/:id", p.Manager.Mid)
+		{
+			m.GET("", p.Manager.Get)
+			m.POST("/edit", p.Manager.Update)
+			m.POST("/del", p.Manager.Del)
+		}
+	}
 
 	captcha := routerGroup.Group("/captcha")
 	{

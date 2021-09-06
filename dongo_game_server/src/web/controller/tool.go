@@ -124,7 +124,7 @@ func (p *ToolHdl) SendEmail(c *gin.Context) {
 	msg.From = []string{"zld126126@sina.com"}
 	// 10分钟邮箱
 	msg.To = []string{"QWYHIN@10min.club"}
-	msg.Subject = fmt.Sprintf("%s,%d", "test", util.ParseSecondTimeToInt64())
+	msg.Subject = fmt.Sprintf("%s,%d", "test", util.ParseSecondTime2Int64())
 	msg.Body = fmt.Sprintf("this is a test letter from dongbao.")
 	msg.From = []string{email.Username}
 

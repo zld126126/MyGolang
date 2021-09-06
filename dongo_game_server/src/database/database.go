@@ -99,3 +99,7 @@ func (p *DB) InitModel_Grpc() error {
 	logrus.Println(`initModel_Grpc end`)
 	return nil
 }
+
+func (p *DB) IsGormNotFound(err error) bool {
+	return errors.Is(err, gorm.ErrRecordNotFound)
+}

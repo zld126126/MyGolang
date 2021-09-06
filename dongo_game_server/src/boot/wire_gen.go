@@ -11,6 +11,7 @@ import (
 	"dongo_game_server/src/support"
 	"dongo_game_server/src/web"
 	"dongo_game_server/src/web/controller"
+	"dongo_game_server/src/web/service"
 	"github.com/google/wire"
 )
 
@@ -19,14 +20,18 @@ import (
 func InitWeb() (*web.WebApp, error) {
 	configConfig := config.DefaultConfig()
 	userServiceClient := config.Grpc_DefaultUserService(configConfig)
+	memory := config.DefaultMemory(configConfig)
 	db := config.NewDatabase_Web(configConfig)
 	baseHdl := &controller.BaseHdl{
 		DB: db,
 	}
 	captchaHdl := &controller.CaptchaHdl{}
 	jwtHdl := &controller.JWTHdl{}
-	managerHdl := &controller.ManagerHdl{
+	managerService := &service.ManagerService{
 		DB: db,
+	}
+	managerHdl := &controller.ManagerHdl{
+		Service: managerService,
 	}
 	projectHdl := &controller.ProjectHdl{
 		DB: db,
@@ -51,7 +56,7 @@ func InitWeb() (*web.WebApp, error) {
 	webApp := &web.WebApp{
 		Config:      configConfig,
 		UserService: userServiceClient,
-		DB:          db,
+		Memory:      memory,
 		Base:        baseHdl,
 		Captcha:     captchaHdl,
 		JWT:         jwtHdl,
@@ -91,6 +96,6 @@ func InitSupport() (*support.SupportApp, error) {
 
 // wire.go:
 
-var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultGrpcConfig, config.Grpc_DefaultUserService)
+var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultGrpcConfig, config.Grpc_DefaultUserService, config.DefaultMemory)
 
-var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.JWTHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"))
+var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.JWTHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(service.ManagerService), "*"))
