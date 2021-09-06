@@ -33,11 +33,11 @@
         1.protoc --go_out=plugins=grpc:. *.proto
 
 ## 功能:
-    1 用户系统
-    2 聊天系统
+    1 用户系统 √ --基本完成
+    2 聊天系统 
     3 资源系统
-    4 token鉴权系统
-    5 socket http proto服务系统
+    4 token鉴权系统 √ --基本完成
+    5 socket http proto服务系统 √ --基本完成
     6 邮件系统
     7 打点系统
 
