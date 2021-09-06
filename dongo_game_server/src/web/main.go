@@ -8,7 +8,11 @@ import (
 	"fmt"
 	"log"
 
+	_ "dongo_game_server/src/web/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type WebApp struct {
@@ -33,6 +37,7 @@ func (p *WebApp) Start() {
 	router := gin.New()
 	router.Use(ServeRecover)
 	// router.LoadHTMLGlob("./resources")
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	routerGroup := router.Group("")
 	p.Mount(routerGroup)
 

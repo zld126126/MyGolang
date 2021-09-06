@@ -40,3 +40,8 @@
     5 socket http proto服务系统
     6 邮件系统
     7 打点系统
+
+## 问题:
+    Type definition of type ‘*ast.InterfaceType’ is not supported yet. Using ‘object’ instead.
+    
+    go get -u github.com/swaggo/swag/cmd/swag@v1.6.7

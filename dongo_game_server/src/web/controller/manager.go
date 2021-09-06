@@ -4,6 +4,7 @@ import (
 	"dongo_game_server/src/global_const"
 	"dongo_game_server/src/model"
 	"dongo_game_server/src/util"
+	"dongo_game_server/src/web/base"
 	"dongo_game_server/src/web/service"
 	"fmt"
 	"net/http"
@@ -23,7 +24,16 @@ type ManagerCreateForm struct {
 	Tp       model.ManagerType `form:"tp" json:"tp"`             // 用户类型
 }
 
-// 创建账号
+// @Summary 创建管理用户
+// @Tags 管理用户
+// @Description 创建管理用户
+// @Accept  json
+// @Produce  json
+// @Param   name     query    string     true        "用户名"
+// @Param   password     query    string     true        "密码"
+// @Param   tp      query    int     true        "用户类型"
+// @Success 200 {string} string	"ok"
+// @Router /manager/create/ [post]
 // curl -X POST "127.0.0.1:9090/manager/create" -d "name=dongbao&password=123456&tp=3"
 func (p *ManagerHdl) Create(c *gin.Context) {
 	var form ManagerCreateForm
@@ -48,7 +58,16 @@ type ManagerListForm struct {
 	Page     int    `form:"page" json:"page"`         // 第几页 1
 }
 
-// 获取所有管理员
+// @Summary 获取所有管理用户
+// @Tags 管理用户
+// @Description 获取所有管理用户
+// @Accept  json
+// @Produce  json
+// @Param   name     query    string     true        "用户名"
+// @Param   pageSize     query    int     true        "条数"
+// @Param   page      query    int     true        "页数"
+// @Success 200 object base.Response
+// @Router /manager/list/ [get]
 // curl -X GET "http://127.0.0.1:9090/manager/list?name=dongbao&page=1&pageSize=10"
 func (p *ManagerHdl) List(c *gin.Context) {
 	var form ManagerListForm
@@ -64,7 +83,14 @@ func (p *ManagerHdl) List(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"total": total, "data": l, "page": form.Page, "pageSize": form.PageSize})
+	res := &base.Response{
+		Total:    total,
+		Data:     l,
+		Page:     form.Page,
+		PageSize: form.PageSize,
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 func (p *ManagerHdl) GetKey(id int) string {
@@ -90,6 +116,13 @@ func (p *ManagerHdl) Mid(c *gin.Context) {
 	util.ParisMap_Put(key, m)
 }
 
+// @获取指定用户
+// @Description get record by ID
+// @Accept  json
+// @Produce json
+// @Param   some_id     path    int     true        "managerId"
+// @Success 200 {string} string	"ok"
+// @Router /manager/{some_id} [get]
 // curl -X GET "http://127.0.0.1:9090/manager/1"
 func (p *ManagerHdl) Get(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
