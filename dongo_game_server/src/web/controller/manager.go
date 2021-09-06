@@ -192,7 +192,7 @@ func (p *ManagerHdl) Login(c *gin.Context) {
 	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
 	signedToken, err := getToken(claims)
 	if err != nil {
-		c.String(http.StatusNotFound, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 

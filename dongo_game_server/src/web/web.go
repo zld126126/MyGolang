@@ -70,5 +70,10 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 		captcha.POST("/verify/:captchaId/:value", p.Captcha.VerifyCaptcha)
 	}
 
+	socket := routerGroup.Group("/socket")
+	{
+		socket.POST("", p.Socket.Create)
+	}
+
 	routerGroup.GET("/email", p.Tool.SendEmail)
 }

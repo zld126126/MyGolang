@@ -12,6 +12,6 @@ const (
 
 	ManagerKey = `ManagerKey_%d` // 用户session key
 
-	SocketPortMin = 20000 // socket 连接最小端口号
-	SocketPortMax = 22000 // socket 连接最大端口号
+	SocketPortMin = 20200 // socket 连接最小端口号
+	SocketPortMax = 20210 // socket 连接最大端口号
 )

@@ -23,7 +23,7 @@ func (p *JWTHdl) GetTokenName(c *gin.Context) {
 	strToken := c.Param("token")
 	claim, err := p.verifyAction(strToken)
 	if err != nil {
-		c.String(http.StatusNotFound, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	c.String(http.StatusOK, "hello,", claim.Username)
@@ -58,7 +58,7 @@ func (p *JWTHdl) Login(c *gin.Context) {
 	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
 	signedToken, err := getToken(claims)
 	if err != nil {
-		c.String(http.StatusNotFound, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	c.String(http.StatusOK, signedToken)
@@ -69,12 +69,12 @@ func (p *JWTHdl) Verify(c *gin.Context) {
 	strToken := c.Param("token")
 	matched, err := util.RegexpToken(strToken)
 	if err != nil || !matched {
-		c.String(http.StatusNotFound, "token 参数错误")
+		c.String(http.StatusBadRequest, "token 参数错误")
 		return
 	}
 	claim, err := p.verifyAction(strToken)
 	if err != nil {
-		c.String(http.StatusNotFound, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	c.String(http.StatusOK, fmt.Sprintf("%s,%s", "verify success", claim.Username))
@@ -85,13 +85,13 @@ func (p *JWTHdl) Refresh(c *gin.Context) {
 	strToken := c.Param("token")
 	claims, err := p.verifyAction(strToken)
 	if err != nil {
-		c.String(http.StatusNotFound, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	claims.ExpiresAt = time.Now().Unix() + (claims.ExpiresAt - claims.IssuedAt)
 	signedToken, err := getToken(claims)
 	if err != nil {
-		c.String(http.StatusNotFound, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	c.String(http.StatusOK, signedToken)

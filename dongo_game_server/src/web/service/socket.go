@@ -54,7 +54,27 @@ func (p *SocketService) Save(c *model.SocketConfig) error {
 	return nil
 }
 
-func (p *SocketService) GetAvailablePort() (int, error) {
+func (p *SocketService) GetInUsePort(projectId int) (int, error) {
+	type Result struct {
+		Port int
+	}
+	var res Result
+	err := p.DB.Gorm.Table("socket_configs sc").
+		Where(`sc.project_id = ?`, projectId).
+		Where(`sc.status = ?`, model.SocketStatus_Run).
+		Select("sc.port").
+		Scan(&res).
+		Error
+	if err != nil {
+		if p.DB.IsGormNotFound(err) {
+			return 0, nil
+		}
+		return 0, err
+	}
+	return res.Port, nil
+}
+
+func (p *SocketService) GetAvailablePort(projectId int) (int, error) {
 	type Result struct {
 		Port int
 	}

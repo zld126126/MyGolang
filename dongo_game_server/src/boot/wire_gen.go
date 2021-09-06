@@ -44,8 +44,12 @@ func InitWeb() (*web.WebApp, error) {
 	socketService := &service.SocketService{
 		DB: db,
 	}
+	projectService := &service.ProjectService{
+		DB: db,
+	}
 	socketHdl := &controller.SocketHdl{
 		Service: socketService,
+		Project: projectService,
 	}
 	emailConfig := config.DefaultEmailConfig(configConfig)
 	toolHdl := &controller.ToolHdl{
@@ -99,4 +103,4 @@ func InitSupport() (*support.SupportApp, error) {
 
 var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultGrpcConfig, config.Grpc_DefaultUserService, config.DefaultMemory)
 
-var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.JWTHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"))
+var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.JWTHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"), wire.Struct(new(service.ProjectService), "*"))
