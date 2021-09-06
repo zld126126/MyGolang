@@ -14,7 +14,6 @@ import (
 type WebApp struct {
 	Config      *config.Config
 	UserService inf.UserServiceClient
-	Memory      *util.Memory
 
 	Base     *controller.BaseHdl
 	Captcha  *controller.CaptchaHdl
@@ -29,6 +28,8 @@ type WebApp struct {
 }
 
 func (p *WebApp) Start() {
+	p.Socket.InitSocket()
+
 	router := gin.New()
 	router.Use(ServeRecover)
 	// router.LoadHTMLGlob("./resources")

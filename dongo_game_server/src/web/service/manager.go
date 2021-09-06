@@ -113,7 +113,7 @@ func (p *ManagerService) List(name string, page int, pageSize int) (int, []*mode
 	if page > 0 && pageSize > 0 {
 		_db = _db.Limit(pageSize).Offset(page - 1)
 	}
-	err = _db.Find(&managers).Error
+	err = _db.Order("m.id desc").Find(&managers).Error
 	if err != nil {
 		return 0, managers, err
 	}

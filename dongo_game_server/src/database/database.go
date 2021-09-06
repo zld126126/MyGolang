@@ -76,6 +76,7 @@ func (p *DB) InitModel_Web() error {
 		model.Project{},
 		model.Track{},
 		model.Consumer{},
+		model.SocketConfig{},
 	}
 	err := p.Gorm.Debug().AutoMigrate(models...).Error
 	if err != nil {

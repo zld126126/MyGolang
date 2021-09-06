@@ -34,6 +34,7 @@ var webSet = wire.NewSet(
 	wire.Struct(new(controller.TrackHdl), "*"),
 
 	wire.Struct(new(service.ManagerService), "*"),
+	wire.Struct(new(service.SocketService), "*"),
 )
 
 func InitWeb() (*web.WebApp, error) {

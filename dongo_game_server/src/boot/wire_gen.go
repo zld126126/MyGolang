@@ -20,7 +20,6 @@ import (
 func InitWeb() (*web.WebApp, error) {
 	configConfig := config.DefaultConfig()
 	userServiceClient := config.Grpc_DefaultUserService(configConfig)
-	memory := config.DefaultMemory(configConfig)
 	db := config.NewDatabase_Web(configConfig)
 	baseHdl := &controller.BaseHdl{
 		DB: db,
@@ -42,8 +41,11 @@ func InitWeb() (*web.WebApp, error) {
 	rpcHdl := &controller.RpcHdl{
 		UserService: userServiceClient,
 	}
-	socketHdl := &controller.SocketHdl{
+	socketService := &service.SocketService{
 		DB: db,
+	}
+	socketHdl := &controller.SocketHdl{
+		Service: socketService,
 	}
 	emailConfig := config.DefaultEmailConfig(configConfig)
 	toolHdl := &controller.ToolHdl{
@@ -56,7 +58,6 @@ func InitWeb() (*web.WebApp, error) {
 	webApp := &web.WebApp{
 		Config:      configConfig,
 		UserService: userServiceClient,
-		Memory:      memory,
 		Base:        baseHdl,
 		Captcha:     captchaHdl,
 		JWT:         jwtHdl,
@@ -98,4 +99,4 @@ func InitSupport() (*support.SupportApp, error) {
 
 var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultGrpcConfig, config.Grpc_DefaultUserService, config.DefaultMemory)
 
-var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.JWTHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(service.ManagerService), "*"))
+var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.JWTHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"))

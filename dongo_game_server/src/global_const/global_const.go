@@ -11,4 +11,7 @@ const (
 	FileMaxBytes = 1024 * 1024 * 2 // 最大文件容量
 
 	ManagerKey = `ManagerKey_%d` // 用户session key
+
+	SocketPortMin = 20000 // socket 连接最小端口号
+	SocketPortMax = 22000 // socket 连接最大端口号
 )
