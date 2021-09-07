@@ -3,7 +3,6 @@ package controller
 import (
 	"dongo_game_server/src/global_const"
 	"dongo_game_server/src/model"
-	"dongo_game_server/src/util"
 	"dongo_game_server/src/web/base"
 	"dongo_game_server/src/web/service"
 	"fmt"
@@ -12,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type ManagerHdl struct {
@@ -113,7 +113,7 @@ func (p *ManagerHdl) Mid(c *gin.Context) {
 	}
 
 	key := p.GetKey(id)
-	util.ParisMap_Put(key, m)
+	dongo_utils.ParisMap_Put(key, m)
 }
 
 // @获取指定用户
@@ -133,7 +133,7 @@ func (p *ManagerHdl) Get(c *gin.Context) {
 	}
 
 	key := p.GetKey(id)
-	m := util.ParisMap_Get(key).(*model.Manager)
+	m := dongo_utils.ParisMap_Get(key).(*model.Manager)
 
 	c.JSON(http.StatusOK, m)
 }
@@ -161,7 +161,7 @@ func (p *ManagerHdl) Update(c *gin.Context) {
 	}
 
 	key := p.GetKey(id)
-	m := util.ParisMap_Get(key).(*model.Manager)
+	m := dongo_utils.ParisMap_Get(key).(*model.Manager)
 
 	err = p.Service.Update(m.Id, form.Name, form.Password, form.Tp)
 	if err != nil {
@@ -182,7 +182,7 @@ func (p *ManagerHdl) Del(c *gin.Context) {
 	}
 
 	key := p.GetKey(id)
-	m := util.ParisMap_Get(key).(*model.Manager)
+	m := dongo_utils.ParisMap_Get(key).(*model.Manager)
 
 	err = p.Service.Del(m.Id)
 	if err != nil {

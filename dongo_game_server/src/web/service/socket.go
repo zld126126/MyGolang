@@ -4,9 +4,9 @@ import (
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/global_const"
 	"dongo_game_server/src/model"
-	"dongo_game_server/src/util"
 
 	"github.com/sirupsen/logrus"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type SocketService struct {
@@ -14,7 +14,7 @@ type SocketService struct {
 }
 
 func (p *SocketService) NewSocketConfig(port int) *model.SocketConfig {
-	t := util.Tick64()
+	t := dongo_utils.Tick64()
 	return &model.SocketConfig{
 		Port:      port,
 		ProjectId: 0,
@@ -117,7 +117,7 @@ func (p *SocketService) InitPort() {
 		}
 
 		if c != nil {
-			c.Mt = util.Tick64()
+			c.Mt = dongo_utils.Tick64()
 			c.Status = model.SocketStatus_Stop
 			c.ProjectId = 0
 			err = p.Save(c)

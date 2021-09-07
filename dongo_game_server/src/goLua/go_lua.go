@@ -1,7 +1,6 @@
 package goLua
 
 import (
-	"dongo_game_server/src/util"
 	"errors"
 	"log"
 	"os"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	lua "github.com/yuin/gopher-lua"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 /**
@@ -209,9 +209,9 @@ func (p *_LuaObject) Example_Go2Lua() {
 	p.DoString(`print("hello")`)
 
 	res := p.DoFileWithRes("fib.lua", "fib")
-	_json, err := util.ToJsonString(res)
+	_json, err := dongo_utils.ToJsonString(res)
 	if err != nil {
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 	logrus.WithField("Tp", res.Tp).WithField("Object", _json).Println("DoFileWithRes success")
 }

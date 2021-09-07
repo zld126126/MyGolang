@@ -4,10 +4,10 @@ import (
 	"dongo_game_server/service/inf"
 	"dongo_game_server/src/config"
 	"dongo_game_server/src/database"
-	"dongo_game_server/src/util"
 	"log"
 	"net"
 
+	"github.com/zld126126/dongo_utils/dongo_utils"
 	"google.golang.org/grpc"
 )
 
@@ -21,7 +21,7 @@ func (p *GrpcApp) Start() {
 	listen, err := net.Listen("tcp", p.GrpcUserService.UserServiceAddr) // Address gRPC服务地址
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 	s := grpc.NewServer()
 	// 与http的注册路由类似，此处将所有服务注册到grpc服务器上，
@@ -29,6 +29,6 @@ func (p *GrpcApp) Start() {
 	log.Println("grpc serve running")
 	if err := s.Serve(listen); err != nil {
 		log.Fatal(err)
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 }

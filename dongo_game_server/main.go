@@ -3,8 +3,9 @@ package main
 import (
 	"dongo_game_server/src/boot"
 	"dongo_game_server/src/goLua"
-	"dongo_game_server/src/util"
 	"log"
+
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 func Application() {
@@ -12,7 +13,7 @@ func Application() {
 	grpcApp, err := boot.InitGrpc()
 	if err != nil {
 		log.Fatal(err)
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 
 	// grpc start
@@ -22,7 +23,7 @@ func Application() {
 	supportApp, err := boot.InitSupport()
 	if err != nil {
 		log.Fatal(err)
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 
 	// support init
@@ -32,7 +33,7 @@ func Application() {
 	webApp, err := boot.InitWeb()
 	if err != nil {
 		log.Fatal(err)
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 
 	// web start
@@ -41,9 +42,9 @@ func Application() {
 
 // TODO 扩展成cobra-viper/src/cmd 命令启动
 func main() {
-	//Application()
+	Application()
 
-	Test()
+	//Test()
 }
 
 // TODO 扩展成Testing.T

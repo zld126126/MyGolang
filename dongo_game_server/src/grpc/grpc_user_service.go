@@ -4,11 +4,11 @@ import (
 	"dongo_game_server/service/inf"
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/model"
-	"dongo_game_server/src/util"
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/pkg/errors"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 	"golang.org/x/net/context"
 )
 
@@ -22,7 +22,7 @@ func (p *Grpc_UserService) GetUser(c context.Context, req *inf.UserReq) (*inf.Us
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf("id:%d,get user err", req.Id))
 	}
-	return &inf.UserResp{Name: user.Name, Time: util.Tick64()}, nil
+	return &inf.UserResp{Name: user.Name, Time: dongo_utils.Tick64()}, nil
 }
 
 func (p *Grpc_UserService) PushUser(context.Context, *inf.UserReq) (*empty.Empty, error) {

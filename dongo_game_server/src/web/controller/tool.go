@@ -5,7 +5,6 @@ import (
 	"dongo_game_server/src/config"
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/global_const"
-	"dongo_game_server/src/util"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -15,6 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/sirupsen/logrus"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type ToolHdl struct {
@@ -113,7 +113,7 @@ func checkFileIsExist(filename string) bool {
 
 // 发送邮件
 func (p *ToolHdl) SendEmail(c *gin.Context) {
-	var email util.EmailConfig
+	var email dongo_utils.EmailConfig
 	err := copier.Copy(&email, p.Email)
 	if err != nil {
 		logrus.WithError(err).Println("send email err")
@@ -121,15 +121,15 @@ func (p *ToolHdl) SendEmail(c *gin.Context) {
 		return
 	}
 
-	var msg util.EmailMsg
+	var msg dongo_utils.EmailMsg
 	msg.From = []string{"zld126126@sina.com"}
 	// 10分钟邮箱
 	msg.To = []string{"QWYHIN@10min.club"}
-	msg.Subject = fmt.Sprintf("%s,%d", "test", util.ParseSecondTime2Int64())
-	msg.Body = fmt.Sprintf("this is a test letter from dongbao.")
+	msg.Subject = fmt.Sprintf("%s,%d", "test", dongo_utils.ParseSecondTimeToInt64())
+	msg.Body = "this is a test letter from dongbao."
 	msg.From = []string{email.Username}
 
-	err = util.SendEmail(&msg, &email)
+	err = dongo_utils.SendEmail(&msg, &email)
 	if err != nil {
 		logrus.WithError(err).Println("send email err")
 		c.String(http.StatusBadRequest, "send email err")

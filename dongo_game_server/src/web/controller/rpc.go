@@ -6,9 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"dongo_game_server/src/util"
-
 	"github.com/gin-gonic/gin"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 	"golang.org/x/net/context"
 )
 
@@ -27,7 +26,7 @@ func (p *RpcHdl) GetGrpcUser(c *gin.Context) {
 	userResp, err := p.UserService.GetUser(context.Background(), &inf.UserReq{Id: int32(userId)})
 	if err != nil {
 		log.Fatalln(err)
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 
 	c.JSON(http.StatusOK, gin.H{

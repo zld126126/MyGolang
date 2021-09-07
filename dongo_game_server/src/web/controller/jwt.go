@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"dongo_game_server/src/util"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type JWTHdl struct{}
@@ -67,7 +66,7 @@ func (p *JWTHdl) Login(c *gin.Context) {
 //http://localhost:9090/verify/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjA1MTIyMTAsImlhdCI6MTU2MDUwODYxMCwidXNlcl9pZCI6MSwicGFzc3dvcmQiOiIxMjM0NTYiLCJ1c2VybmFtZSI6ImRvbmciLCJmdWxsX25hbWUiOiJkb25nIiwicGVybWlzc2lvbnMiOltdfQ.Esh1Zge0vO1BAW1GeR5wurWP3H1jUIaMf3tcSaUwkzA
 func (p *JWTHdl) Verify(c *gin.Context) {
 	strToken := c.Param("token")
-	matched, err := util.RegexpToken(strToken)
+	matched, err := dongo_utils.RegexpToken(strToken)
 	if err != nil || !matched {
 		c.String(http.StatusBadRequest, "token 参数错误")
 		return

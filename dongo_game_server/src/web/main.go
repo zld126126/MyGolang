@@ -3,7 +3,6 @@ package web
 import (
 	"dongo_game_server/service/inf"
 	"dongo_game_server/src/config"
-	"dongo_game_server/src/util"
 	"dongo_game_server/src/web/controller"
 	"fmt"
 	"log"
@@ -13,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type WebApp struct {
@@ -44,7 +44,7 @@ func (p *WebApp) Start() {
 	err := router.Run(fmt.Sprintf(`:%s`, p.Config.Web.Addr))
 	if err != nil {
 		log.Fatalln(err)
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 
 	log.Println("web serve running")

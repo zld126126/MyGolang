@@ -2,7 +2,6 @@ package database
 
 import (
 	"dongo_game_server/src/model"
-	"dongo_game_server/src/util"
 	"fmt"
 	"time"
 
@@ -11,6 +10,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type DB struct {
@@ -35,7 +35,7 @@ func NewGormDB_Mysql(db *Database) *gorm.DB {
 	instance, err := gorm.Open("mysql", connStr_Mysql(db))
 	if err != nil {
 		logrus.WithField("err", fmt.Sprintf("%+v", err)).Println(db.Database + "connect error")
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 	instance.DB().SetConnMaxLifetime(time.Minute * 5)
 	instance.DB().SetMaxIdleConns(10)
@@ -54,7 +54,7 @@ func NewGormDB_Postgres(db *Database) *gorm.DB {
 	instance, err := gorm.Open("postgres", connStr_Postgres(db))
 	if err != nil {
 		logrus.WithField("err", fmt.Sprintf("%+v", err)).Println(db.Database + "connect error")
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 	instance.DB().SetConnMaxLifetime(time.Minute * 5)
 	instance.DB().SetMaxIdleConns(10)

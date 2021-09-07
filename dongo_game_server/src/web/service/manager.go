@@ -3,8 +3,9 @@ package service
 import (
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/model"
-	"dongo_game_server/src/util"
 	"errors"
+
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type ManagerService struct {
@@ -17,7 +18,7 @@ func NewManager(name string, passowrd string, tp model.ManagerType) *model.Manag
 		Password: passowrd,
 		Tp:       tp,
 	}
-	t := util.Tick64()
+	t := dongo_utils.Tick64()
 	m.Ct = t
 	m.Mt = t
 	return m
@@ -138,7 +139,7 @@ func (p *ManagerService) Update(id int, name string, password string, tp model.M
 	m.Name = name
 	m.Password = password
 	m.Tp = tp
-	m.Mt = util.Tick64()
+	m.Mt = dongo_utils.Tick64()
 
 	err = p.DB.Gorm.Save(&m).Error
 	if err != nil {
@@ -153,7 +154,7 @@ func (p *ManagerService) Del(id int) error {
 		return err
 	}
 
-	m.Dt = util.Tick64()
+	m.Dt = dongo_utils.Tick64()
 	err = p.DB.Gorm.Save(&m).Error
 	if err != nil {
 		return err

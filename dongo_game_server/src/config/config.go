@@ -14,7 +14,8 @@ import (
 	"dongo_game_server/service/inf"
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/global_const"
-	"dongo_game_server/src/util"
+
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 func DefaultConfig() *Config {
@@ -43,7 +44,7 @@ func init() {
 
 	err := configInit()
 	if err != nil {
-		util.Chk(err)
+		dongo_utils.Chk(err)
 	}
 }
 
@@ -53,7 +54,7 @@ func configInit() error {
 	if _, err := toml.DecodeFile(configFilePath, &conf); err != nil {
 		return err
 	}
-	configStr, err := util.ToJsonString(conf)
+	configStr, err := dongo_utils.ToJsonString(conf)
 	if err != nil {
 		logrus.WithError(err).Println("config init error")
 		return err
@@ -99,7 +100,7 @@ func NewDatabase_Web(config *Config) *database.DB {
 		Gorm: database.NewGormDB_Mysql(config.DatabaseWeb),
 	}
 	err := db.InitModel_Web()
-	util.Chk(err)
+	dongo_utils.Chk(err)
 	return db
 }
 
@@ -108,12 +109,17 @@ func NewDatabase_Grpc(config *Config) *database.DB {
 		Gorm: database.NewGormDB_Mysql(config.DatabaseGrpc),
 	}
 	err := db.InitModel_Grpc()
-	util.Chk(err)
+	dongo_utils.Chk(err)
 	return db
 }
 
-func DefaultMemory(config *Config) *util.Memory {
-	return util.DefaultMemory(config.Base.ProjectName)
+var Memory *dongo_utils.Memory
+
+func DefaultMemory(config *Config) *dongo_utils.Memory {
+	if Memory == nil {
+		Memory = dongo_utils.NewMemory(config.Base.ProjectName)
+	}
+	return Memory
 }
 
 func DefaultGrpcConfig(config *Config) *GrpcConfig {

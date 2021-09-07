@@ -3,8 +3,9 @@ package service
 import (
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/model"
-	"dongo_game_server/src/util"
 	"errors"
+
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type ProjectService struct {
@@ -29,11 +30,11 @@ func NewProject(name string, resourcePath string, restApi string) *model.Project
 		ResourcePath: resourcePath,
 		RestApi:      restApi,
 	}
-	t := util.Tick64()
+	t := dongo_utils.Tick64()
 	m.Ct = t
 	m.Mt = t
 
-	m.Token = util.GetMd5Str("simple")(name)
+	m.Token = dongo_utils.GetMd5Str("simple")(name)
 	return m
 }
 
