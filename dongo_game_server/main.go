@@ -2,12 +2,12 @@ package main
 
 import (
 	"dongo_game_server/src/boot"
+	"dongo_game_server/src/goLua"
 	"dongo_game_server/src/util"
 	"log"
 )
 
-// TODO 扩展成cobra-viper/src/cmd 命令启动
-func main() {
+func Application() {
 	// grpc init
 	grpcApp, err := boot.InitGrpc()
 	if err != nil {
@@ -37,4 +37,16 @@ func main() {
 
 	// web start
 	webApp.Start()
+}
+
+// TODO 扩展成cobra-viper/src/cmd 命令启动
+func main() {
+	Application()
+
+	//Test()
+}
+
+// TODO 扩展成Testing.T
+func Test() {
+	goLua.Lua_Interface.Example()
 }
