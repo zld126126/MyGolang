@@ -40,9 +40,9 @@ func Application() {
 
 // TODO 扩展成cobra-viper/src/cmd 命令启动
 func main() {
-	//Application()
+	Application()
 
-	Test()
+	//Test()
 }
 
 // TODO 扩展成Testing.T

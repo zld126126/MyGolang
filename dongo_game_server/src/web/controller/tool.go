@@ -111,6 +111,7 @@ func checkFileIsExist(filename string) bool {
 	return exist
 }
 
+// 发送邮件
 func (p *ToolHdl) SendEmail(c *gin.Context) {
 	var email util.EmailConfig
 	err := copier.Copy(&email, p.Email)

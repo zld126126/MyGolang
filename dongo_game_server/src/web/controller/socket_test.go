@@ -1,11 +1,11 @@
-package main
+package controller
 
 import (
 	"fmt"
 	"net"
 )
 
-const socketTestPort = "20200"
+const socketTestPort = "12021"
 
 // curl -X POST "127.0.0.1:9090/project/create" -d "name=dongbao&resource_path=/dongbao&rest_api=/dongbao"
 func SocketTest() {
