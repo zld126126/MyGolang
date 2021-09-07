@@ -3,24 +3,12 @@ package service
 import (
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/model"
+	"dongo_game_server/src/util"
+	"errors"
 )
 
 type ProjectService struct {
 	DB *database.DB
-}
-
-func (p *ProjectService) UseSocket(port int, projectId int) error {
-	proj, err := p.GetByPort(port)
-	if err != nil {
-		return err
-	}
-
-	proj.Id = projectId
-	err = p.DB.Gorm.Table(`projects p`).Save(&proj).Error
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func (p *ProjectService) Get(id int) (*model.Project, error) {
@@ -35,19 +23,49 @@ func (p *ProjectService) Get(id int) (*model.Project, error) {
 	return &proj, nil
 }
 
-func (p *ProjectService) GetByPort(port int) (*model.Project, error) {
-	var proj model.Project
-	err := p.DB.Gorm.Table(`projects p`).
-		Where(`p.dt = 0`).
-		Where(`p.port = ?`, port).
-		Scan(&proj).Error
-	if err != nil {
-		return nil, err
+func NewProject(name string, resourcePath string, restApi string) *model.Project {
+	m := &model.Project{
+		Name:         name,
+		ResourcePath: resourcePath,
+		RestApi:      restApi,
 	}
-	return &proj, nil
+	t := util.Tick64()
+	m.Ct = t
+	m.Mt = t
+
+	m.Token = util.GetMd5Str("simple")(name)
+	return m
 }
 
-func (p *ProjectService) Create() error {
+func (p *ProjectService) ChkExist(name string) (bool, error) {
+	total := 0
+	err := p.DB.Gorm.Table(`projects p`).
+		Where(`p.name = ?`, name).
+		Where(`p.dt = 0`).
+		Count(&total).Error
+	if err != nil {
+		if p.DB.IsGormNotFound(err) {
+			return false, nil
+		}
+		return false, err
+	}
+	return total > 0, nil
+}
 
+func (p *ProjectService) Add(name string, resourcePath string, restApi string) error {
+	exist, err := p.ChkExist(name)
+	if err != nil {
+		return err
+	}
+
+	if exist {
+		return errors.New("不可创建同名用户")
+	}
+
+	m := NewProject(name, resourcePath, restApi)
+	err = p.DB.Gorm.Create(&m).Error
+	if err != nil {
+		return err
+	}
 	return nil
 }

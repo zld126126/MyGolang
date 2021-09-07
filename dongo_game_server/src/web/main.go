@@ -80,5 +80,10 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 		socket.POST("", p.Socket.Create)
 	}
 
+	project := routerGroup.Group("/project")
+	{
+		project.POST("/create", p.Project.Create)
+	}
+
 	routerGroup.GET("/email", p.Tool.SendEmail)
 }

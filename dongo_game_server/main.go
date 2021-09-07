@@ -2,7 +2,6 @@ package main
 
 import (
 	"dongo_game_server/src/boot"
-	"dongo_game_server/src/goLua"
 	"dongo_game_server/src/util"
 	"log"
 )
@@ -41,12 +40,13 @@ func Application() {
 
 // TODO 扩展成cobra-viper/src/cmd 命令启动
 func main() {
-	Application()
+	//Application()
 
-	//Test()
+	Test()
 }
 
 // TODO 扩展成Testing.T
 func Test() {
-	goLua.Lua_Interface.Example()
+	//goLua.Lua_Interface.Example()
+	SocketTest()
 }

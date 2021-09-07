@@ -99,9 +99,9 @@ func (p *SocketHdl) Create(c *gin.Context) {
 		return
 	}
 
-	err = p.Project.UseSocket(port, proj.Id)
+	err = p.Service.UsePort(port, proj.Id)
 	if err != nil {
-		c.String(http.StatusBadRequest, "创建socket连接失败")
+		c.String(http.StatusBadRequest, "创建socket失败")
 		return
 	}
 

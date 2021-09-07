@@ -93,6 +93,21 @@ func (p *SocketService) GetAvailablePort(projectId int) (int, error) {
 	return res.Port, nil
 }
 
+func (p *SocketService) UsePort(port int, projectId int) error {
+	config, err := p.GetByPort(port)
+	if err != nil {
+		return err
+	}
+
+	config.ProjectId = projectId
+	err = p.Save(config)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (p *SocketService) InitPort() {
 	for i := global_const.SocketPortMin; i < global_const.SocketPortMax; i++ {
 		c, err := p.GetByPort(i)

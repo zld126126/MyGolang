@@ -32,8 +32,11 @@ func InitWeb() (*web.WebApp, error) {
 	managerHdl := &controller.ManagerHdl{
 		Service: managerService,
 	}
-	projectHdl := &controller.ProjectHdl{
+	projectService := &service.ProjectService{
 		DB: db,
+	}
+	projectHdl := &controller.ProjectHdl{
+		Service: projectService,
 	}
 	resourceHdl := &controller.ResourceHdl{
 		DB: db,
@@ -42,9 +45,6 @@ func InitWeb() (*web.WebApp, error) {
 		UserService: userServiceClient,
 	}
 	socketService := &service.SocketService{
-		DB: db,
-	}
-	projectService := &service.ProjectService{
 		DB: db,
 	}
 	socketHdl := &controller.SocketHdl{
