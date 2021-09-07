@@ -1,0 +1,1 @@
+print(double(20))

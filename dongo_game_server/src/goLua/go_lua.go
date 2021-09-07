@@ -2,7 +2,7 @@ package goLua
 
 import (
 	"dongo_game_server/src/util"
-	"fmt"
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -79,14 +79,14 @@ func (pl *lStatePool) Shutdown() {
 // Global LState pool
 var luaPool = &lStatePool{saved: make([]*lua.LState, 0, 4)}
 
-type LuaInterface struct{}
+type _LuaObject struct{}
 
-var Lua_Interface = &LuaInterface{}
-var Lua_Instance = luaPool.Get()
+var LuaObject = &_LuaObject{}
+var Lua = luaPool.Get()
 
 const LuaPath = "/src/goLua/lua/"
 
-func (p *LuaInterface) getCurrentDirectory() string {
+func (p *_LuaObject) getCurrentDirectory() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		log.Fatal(err)
@@ -95,56 +95,123 @@ func (p *LuaInterface) getCurrentDirectory() string {
 }
 
 // 默认lua文件路径为/src/web/scripts/lua
-func (p *LuaInterface) GetLuaDirectory() string {
+func (p *_LuaObject) GetLuaDirectory() string {
 	return p.getCurrentDirectory() + LuaPath
 }
 
-func (p *LuaInterface) DoString(s string) {
-	err := Lua_Instance.DoString(s)
+func (p *_LuaObject) DoString(s string) {
+	err := Lua.DoString(s)
 	if err != nil {
 		logrus.WithError(err).Println("lua do string error")
 	}
 }
 
-func (p *LuaInterface) DoFile(fileName string) {
+func (p *_LuaObject) DoFile(fileName string) {
 	path := p.GetLuaDirectory() + fileName
-	err := Lua_Instance.DoFile(path)
+	err := Lua.DoFile(path)
 	if err != nil {
 		logrus.WithError(err).Println("lua do file error")
 	}
 }
 
-func (p *LuaInterface) DoFileWithRes(fileName string, funcName string) int {
+type LuaBaseTp int32
+
+const (
+	LuaBaseTpUnknow LuaBaseTp = iota
+	LuaBaseTpNil
+	LuaBaseTpBool
+	LuaBaseTpNumber
+	LuaBaseTpString
+	LuaBaseTpFunction
+	LuaBaseTpUserData
+	LuaBaseTpState
+	LuaBaseTpTable
+	LuaBaseTpChannel
+)
+
+type LuaBaseResponse struct {
+	Tp          LuaBaseTp   `json:"tp"`
+	StringValue string      `json:"stringValue"`
+	IntValue    int         `json:"intValue"`
+	BoolValue   bool        `json:"boolValue"`
+	Value       interface{} `json:"value"` // TODO 后期支持更多类型
+}
+
+func (p *_LuaObject) DoFileWithRes(fileName string, funcName string) *LuaBaseResponse {
 	// 加载fib.lua
 	path := p.GetLuaDirectory() + fileName
-	if err := Lua_Instance.DoFile(path); err != nil {
+	if err := Lua.DoFile(path); err != nil {
 		panic(err)
 	}
+
 	// 调用fib(n)
-	err := Lua_Instance.CallByParam(lua.P{
-		Fn:      Lua_Instance.GetGlobal(funcName), // 获取fib函数引用
-		NRet:    1,                                // 指定返回值数量
-		Protect: true,                             // 如果出现异常，是panic还是返回err
+	err := Lua.CallByParam(lua.P{
+		Fn:      Lua.GetGlobal(funcName), // 获取fib函数引用
+		NRet:    1,                       // 指定返回值数量
+		Protect: true,                    // 如果出现异常，是panic还是返回err
 	}, lua.LNumber(10)) // 传递输入参数n=10
+	if err != nil {
+		logrus.WithError(err).Println("DoFileWithRes error")
+		return nil
+	}
+
+	// 获取返回结果
+	val := Lua.Get(-1)
+	var resp LuaBaseResponse
+
+	switch val.Type() {
+	case lua.LTNil:
+		return nil
+	case lua.LTBool:
+		res := val.(lua.LBool)
+		resp = LuaBaseResponse{
+			Tp:        LuaBaseTpBool,
+			BoolValue: bool(res),
+		}
+	case lua.LTNumber:
+		res := val.(lua.LNumber)
+		resp = LuaBaseResponse{
+			Tp:       LuaBaseTpNumber,
+			IntValue: int(res),
+		}
+	case lua.LTString:
+		res := val.(lua.LString)
+		resp = LuaBaseResponse{
+			Tp:          LuaBaseTpString,
+			StringValue: string(res),
+		}
+	default:
+		logrus.WithError(errors.New("convert lua unknown"))
+		resp = LuaBaseResponse{
+			Tp:    LuaBaseTpUnknow,
+			Value: val,
+		}
+	}
+
+	// 从堆栈中扔掉返回结果
+	Lua.Pop(1)
+	// 打印结果
+	return &resp
+}
+
+func (p *_LuaObject) double(L *lua.LState) int {
+	lv := L.ToInt(1)            /* get argument */
+	L.Push(lua.LNumber(lv * 2)) /* push result */
+	return 1
+}
+
+func (p *_LuaObject) Example_Lua2Go() {
+	Lua.SetGlobal("double", Lua.NewFunction(p.double))
+	Lua.DoString("print(double(20))")
+}
+
+func (p *_LuaObject) Example_Go2Lua() {
+	p.DoString(`print("hello")`)
+
+	res := p.DoFileWithRes("fib.lua", "fib")
+	_json, err := util.ToJsonString(res)
 	if err != nil {
 		util.Chk(err)
 	}
-	// 获取返回结果
-	ret := Lua_Instance.Get(-1)
-	// 从堆栈中扔掉返回结果
-	Lua_Instance.Pop(1)
-	// 打印结果
-	res, ok := ret.(lua.LNumber)
-	if ok {
-		fmt.Println(int(res))
-	} else {
-		fmt.Println("unexpected result")
-	}
-	return int(res)
-}
-
-func (p *LuaInterface) Example() {
-	p.DoString(`print("hello")`)
-	res := p.DoFileWithRes("fib.lua", "fib")
-	logrus.WithField("dofile Result", res)
+	logrus.WithField("Tp", res.Tp).WithField("Object", _json).Println("DoFileWithRes success")
 }
