@@ -17,7 +17,7 @@ type SocketHdl struct {
 }
 
 type SocketCreateForm struct {
-	ProjectId int `form:"project_id" json:"project_id"` // 用户名称
+	ProjectId int64 `form:"project_id" json:"project_id"` // 项目id
 }
 
 func (p *SocketHdl) HandleSocket(conn net.Conn) {
@@ -47,7 +47,7 @@ func (p *SocketHdl) HandleSocket(conn net.Conn) {
 	}
 }
 
-func (p *SocketHdl) AcceptSocket(port int) {
+func (p *SocketHdl) AcceptSocket(port int64) {
 	listener, err := net.Listen("tcp", ":"+fmt.Sprint(port))
 	if err != nil {
 		logrus.Println(err)

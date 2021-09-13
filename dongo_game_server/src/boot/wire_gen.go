@@ -25,7 +25,6 @@ func InitWeb() (*web.WebApp, error) {
 		DB: db,
 	}
 	captchaHdl := &controller.CaptchaHdl{}
-	jwtHdl := &controller.JWTHdl{}
 	managerService := &service.ManagerService{
 		DB: db,
 	}
@@ -59,12 +58,18 @@ func InitWeb() (*web.WebApp, error) {
 	trackHdl := &controller.TrackHdl{
 		DB: db,
 	}
+	managerPathService := &service.ManagerPathService{
+		DB: db,
+	}
+	managerPathHdl := &controller.ManagerPathHdl{
+		Service: managerPathService,
+	}
+	fakeHdl := &controller.FakeHdl{}
 	webApp := &web.WebApp{
 		Config:      configConfig,
 		UserService: userServiceClient,
 		Base:        baseHdl,
 		Captcha:     captchaHdl,
-		JWT:         jwtHdl,
 		Manager:     managerHdl,
 		Project:     projectHdl,
 		Resource:    resourceHdl,
@@ -72,6 +77,8 @@ func InitWeb() (*web.WebApp, error) {
 		Socket:      socketHdl,
 		Tool:        toolHdl,
 		Track:       trackHdl,
+		ManagerPath: managerPathHdl,
+		Fake:        fakeHdl,
 	}
 	return webApp, nil
 }
@@ -103,4 +110,4 @@ func InitSupport() (*support.SupportApp, error) {
 
 var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultGrpcConfig, config.Grpc_DefaultUserService, config.DefaultMemory)
 
-var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.JWTHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"), wire.Struct(new(service.ProjectService), "*"))
+var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(controller.ManagerPathHdl), "*"), wire.Struct(new(controller.FakeHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"), wire.Struct(new(service.ProjectService), "*"), wire.Struct(new(service.ManagerPathService), "*"))

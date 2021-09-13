@@ -19,24 +19,29 @@ type WebApp struct {
 	Config      *config.Config
 	UserService inf.UserServiceClient
 
-	Base     *controller.BaseHdl
-	Captcha  *controller.CaptchaHdl
-	JWT      *controller.JWTHdl
-	Manager  *controller.ManagerHdl
-	Project  *controller.ProjectHdl
-	Resource *controller.ResourceHdl
-	RPC      *controller.RpcHdl
-	Socket   *controller.SocketHdl
-	Tool     *controller.ToolHdl
-	Track    *controller.TrackHdl
+	Base        *controller.BaseHdl
+	Captcha     *controller.CaptchaHdl
+	Manager     *controller.ManagerHdl
+	Project     *controller.ProjectHdl
+	Resource    *controller.ResourceHdl
+	RPC         *controller.RpcHdl
+	Socket      *controller.SocketHdl
+	Tool        *controller.ToolHdl
+	Track       *controller.TrackHdl
+	ManagerPath *controller.ManagerPathHdl
+
+	Fake *controller.FakeHdl
 }
 
 func (p *WebApp) Start() {
 	p.Socket.InitSocket()
 
 	router := gin.New()
+
 	router.Use(ServeRecover)
+	//router.Use(gin.Recovery())
 	// router.LoadHTMLGlob("./resources")
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	routerGroup := router.Group("")
 	p.Mount(routerGroup)
@@ -51,39 +56,78 @@ func (p *WebApp) Start() {
 }
 
 func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
-	routerGroup.GET("/version", p.Base.GetVersion())
-	routerGroup.GET("/grpc/user/:user_id", p.RPC.GetGrpcUser)
-
-	manager := routerGroup.Group("/manager")
+	// 无需登陆即可获取
+	baseGroup := routerGroup.Group("/base")
 	{
-		manager.POST("/create", p.Manager.Create)
-		manager.POST("/login", p.Manager.Login)
-		manager.POST("/logout ", p.Manager.Logout)
-		manager.GET("/list", p.Manager.List)
-		m := manager.Group("/:id", p.Manager.Mid)
+		baseGroup.GET("/version", p.Base.GetVersion())
+		baseGroup.GET("/grpc/user/:user_id", p.RPC.GetGrpcUser)
+
+		captcha := baseGroup.Group("/captcha")
 		{
-			m.GET("", p.Manager.Get)
-			m.POST("/edit", p.Manager.Update)
-			m.POST("/del", p.Manager.Del)
+			captcha.GET("", p.Captcha.GetCaptcha)
+			captcha.GET("/image/:captchaId", p.Captcha.GetCaptchaImg)
+			captcha.POST("/verify/:captchaId/:value", p.Captcha.VerifyCaptcha)
+		}
+
+		manager := baseGroup.Group("/manager")
+		{
+			manager.POST("/login", p.Manager.Login)
+			manager.POST("/logout ", p.Manager.Logout)
+		}
+
+		managerPath := baseGroup.Group("/manager_path")
+		{
+			managerPath.POST("/create", p.ManagerPath.Create)
+			path := managerPath.Group("/:id", p.ManagerPath.Mid)
+			{
+				path.GET("", p.ManagerPath.Create)
+				path.POST("/update", p.ManagerPath.Update)
+				path.POST("/del", p.ManagerPath.Del)
+			}
+			managerPath.GET("/full_list", p.ManagerPath.FullList)
 		}
 	}
 
-	captcha := routerGroup.Group("/captcha")
+	// web后台对接api
+	webGroup := routerGroup.Group("/web", p.Manager.MidLogin)
 	{
-		captcha.GET("", p.Captcha.GetCaptcha)
-		captcha.GET("/image/:captchaId", p.Captcha.GetCaptchaImg)
-		captcha.POST("/verify/:captchaId/:value", p.Captcha.VerifyCaptcha)
+		manager := webGroup.Group("/manager")
+		{
+			manager.POST("/create", p.Manager.IsSuperManager, p.Manager.Create)
+			manager.POST("/login", p.Manager.Login)
+			manager.POST("/logout ", p.Manager.Logout)
+			manager.GET("/list", p.Manager.List)
+			m := manager.Group("/:id", p.Manager.Mid)
+			{
+				m.GET("", p.Manager.Get)
+				m.POST("/edit", p.Manager.IsSuperManager, p.Manager.Update)
+				m.POST("/del", p.Manager.IsSuperManager, p.Manager.Del)
+				m.POST("/path_list", p.Manager.IsSuperManager, p.Manager.PathList)
+				m.POST("/path_bind", p.Manager.IsSuperManager, p.Manager.PathBind)
+				m.POST("/path_unbind", p.Manager.IsSuperManager, p.Manager.PathUnBind)
+			}
+		}
+
+		project := webGroup.Group("/project")
+		{
+			project.POST("/create", p.Project.Create)
+		}
+
+		webGroup.GET("/email", p.Tool.SendEmail)
 	}
 
-	socket := routerGroup.Group("/socket")
+	// client后台对接api
+	clientGroup := routerGroup.Group("/client")
 	{
-		socket.POST("", p.Socket.Create)
+		socket := clientGroup.Group("/socket")
+		{
+			socket.POST("", p.Socket.Create)
+		}
 	}
 
-	project := routerGroup.Group("/project")
+	// debug 命令
+	debugGroup := routerGroup.Group("/debug", p.Fake.Mid)
 	{
-		project.POST("/create", p.Project.Create)
+		debugGroup.POST("/manager/create", p.Manager.Create)
 	}
-
-	routerGroup.GET("/email", p.Tool.SendEmail)
 }

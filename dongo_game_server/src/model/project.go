@@ -2,7 +2,7 @@ package model
 
 // 项目类
 type Project struct {
-	Id           int    `gorm:"primary_key" json:"id"`         // 主键ID
+	Id           int64  `gorm:"primary_key" json:"id"`         // 主键ID
 	Name         string `gorm:"not null" json:"name"`          // 项目名称
 	Token        string `gorm:"not null" json:"token"`         // Token刷新令牌
 	RestApi      string `gorm:"default:''" json:"rest_api"`    // HttpRestApi 例如/:id

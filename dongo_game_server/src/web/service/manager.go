@@ -2,8 +2,14 @@ package service
 
 import (
 	"dongo_game_server/src/database"
+	"dongo_game_server/src/global_const"
 	"dongo_game_server/src/model"
+	"encoding/base64"
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/zld126126/dongo_utils/dongo_utils"
 )
@@ -39,7 +45,7 @@ func (p *ManagerService) ChkExist(name string) (bool, error) {
 	return total > 0, nil
 }
 
-func (p *ManagerService) ChkExistForUpdate(name string, id int) (bool, error) {
+func (p *ManagerService) ChkExistForUpdate(name string, id int64) (bool, error) {
 	total := 0
 	err := p.DB.Gorm.Table(`managers m`).
 		Where(`m.name = ?`, name).
@@ -55,7 +61,7 @@ func (p *ManagerService) ChkExistForUpdate(name string, id int) (bool, error) {
 	return total > 0, nil
 }
 
-func (p *ManagerService) Login(name string, password string) error {
+func (p *ManagerService) Login(name string, password string) (*model.Manager, error) {
 	var user model.Manager
 	err := p.DB.Gorm.Table(`managers m`).
 		Where(`m.name = ?`, name).
@@ -63,12 +69,64 @@ func (p *ManagerService) Login(name string, password string) error {
 		Where(`m.dt = 0`).
 		Scan(&user).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return &user, nil
 }
 
-func (p *ManagerService) Get(id int) (*model.Manager, error) {
+func (p *ManagerService) EncodeToken(m *model.Manager) (string, error) {
+	if m == nil {
+		return "", errors.New("错误的用户")
+	}
+
+	overTime := dongo_utils.Tick64(time.Now().AddDate(0, 0, 1))
+	k := "%d" + global_const.ManagerLoginSplitKey + "%d"
+	token := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf(k, m.Id, overTime)))
+	return token, nil
+}
+
+func (p *ManagerService) DecodeToken(token string) (*model.Manager, error) {
+	convert := func(s string) (int64, error) {
+		i, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			return 0, err
+		}
+		return i, nil
+	}
+
+	s, err := base64.StdEncoding.DecodeString(token)
+	if err != nil {
+		return nil, errors.New("错误的token")
+	}
+
+	arr := strings.Split(string(s), global_const.ManagerLoginSplitKey)
+	if len(arr) != 2 {
+		return nil, errors.New("错误的token")
+	}
+
+	managerId, err := convert(arr[0])
+	if err != nil {
+		return nil, errors.New("错误的用户信息")
+	}
+
+	m, err := p.Get(managerId)
+	if err != nil {
+		return nil, errors.New("用户不存在")
+	}
+
+	overTime, err := convert(arr[1])
+	if err != nil {
+		return nil, errors.New("用户信息已过期")
+	}
+
+	if overTime < dongo_utils.Tick64() {
+		return nil, errors.New("用户信息已过期")
+	}
+
+	return m, nil
+}
+
+func (p *ManagerService) Get(id int64) (*model.Manager, error) {
 	var user model.Manager
 	err := p.DB.Gorm.Table(`managers m`).
 		Where(`m.id = ?`, id).
@@ -121,7 +179,7 @@ func (p *ManagerService) List(name string, page int, pageSize int) (int, []*mode
 	return total, managers, nil
 }
 
-func (p *ManagerService) Update(id int, name string, password string, tp model.ManagerType) error {
+func (p *ManagerService) Update(id int64, name string, password string, tp model.ManagerType) error {
 	exist, err := p.ChkExistForUpdate(name, id)
 	if err != nil {
 		return err
@@ -148,7 +206,7 @@ func (p *ManagerService) Update(id int, name string, password string, tp model.M
 	return nil
 }
 
-func (p *ManagerService) Del(id int) error {
+func (p *ManagerService) Del(id int64) error {
 	m, err := p.Get(id)
 	if err != nil {
 		return err

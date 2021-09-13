@@ -24,7 +24,6 @@ var configSet = wire.NewSet(
 var webSet = wire.NewSet(
 	wire.Struct(new(controller.BaseHdl), "*"),
 	wire.Struct(new(controller.CaptchaHdl), "*"),
-	wire.Struct(new(controller.JWTHdl), "*"),
 	wire.Struct(new(controller.ManagerHdl), "*"),
 	wire.Struct(new(controller.ProjectHdl), "*"),
 	wire.Struct(new(controller.ResourceHdl), "*"),
@@ -32,10 +31,13 @@ var webSet = wire.NewSet(
 	wire.Struct(new(controller.SocketHdl), "*"),
 	wire.Struct(new(controller.ToolHdl), "*"),
 	wire.Struct(new(controller.TrackHdl), "*"),
+	wire.Struct(new(controller.ManagerPathHdl), "*"),
+	wire.Struct(new(controller.FakeHdl), "*"),
 
 	wire.Struct(new(service.ManagerService), "*"),
 	wire.Struct(new(service.SocketService), "*"),
 	wire.Struct(new(service.ProjectService), "*"),
+	wire.Struct(new(service.ManagerPathService), "*"),
 )
 
 func InitWeb() (*web.WebApp, error) {

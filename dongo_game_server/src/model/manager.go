@@ -10,7 +10,7 @@ const (
 
 // 管理员
 type Manager struct {
-	Id       int         `gorm:"primary_key" json:"id"`    // 主键ID
+	Id       int64       `gorm:"primary_key" json:"id"`    // 主键ID
 	Name     string      `gorm:"not null" json:"name"`     // 用户名称
 	Password string      `gorm:"not null" json:"password"` // 用户密码
 	Tp       ManagerType `gorm:"default:0" json:"tp"`      // 用户类型
@@ -19,6 +19,12 @@ type Manager struct {
 	Mt       int64       `gorm:"default:0" json:"mt"`      // 修改时间
 }
 
+// 是否删除
 func (p *Manager) IsDt() bool {
 	return p.Dt != 0
+}
+
+// 是否是超级管理员
+func (p *Manager) IsSuper() bool {
+	return p.Tp == ManagerType_Super
 }

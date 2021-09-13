@@ -15,7 +15,7 @@ type RpcHdl struct {
 	UserService inf.UserServiceClient
 }
 
-// http://localhost:9090/grpc/user/2
+// http://localhost:9090/base/grpc/user/2
 func (p *RpcHdl) GetGrpcUser(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Param("user_id"))
 	if err != nil {

@@ -17,6 +17,14 @@ type BaseHdl struct {
 	DB *database.DB
 }
 
+// @Summary 获取版本
+// @Tags 获取版本
+// @Description 获取版本
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"ok"
+// @Router /base/version [get]
+// curl -X GET "127.0.0.1:9090/base/version"
 func (p *BaseHdl) GetVersion() gin.HandlerFunc {
 	version := viper.GetViper().GetString(global_const.ConfigVersionKey)
 	return func(c *gin.Context) {

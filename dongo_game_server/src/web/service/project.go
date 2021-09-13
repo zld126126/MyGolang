@@ -12,7 +12,7 @@ type ProjectService struct {
 	DB *database.DB
 }
 
-func (p *ProjectService) Get(id int) (*model.Project, error) {
+func (p *ProjectService) Get(id int64) (*model.Project, error) {
 	var proj model.Project
 	err := p.DB.Gorm.Table(`projects p`).
 		Where(`p.dt = 0`).

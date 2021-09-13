@@ -6,12 +6,10 @@ import (
 	"dongo_game_server/src/web/base"
 	"dongo_game_server/src/web/service"
 	"fmt"
-	"net/http"
-	"strconv"
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/zld126126/dongo_utils/dongo_utils"
+	"net/http"
+	"strconv"
 )
 
 type ManagerHdl struct {
@@ -33,8 +31,9 @@ type ManagerCreateForm struct {
 // @Param   password     query    string     true        "密码"
 // @Param   tp      query    int     true        "用户类型"
 // @Success 200 {string} string	"ok"
-// @Router /manager/create/ [post]
-// curl -X POST "127.0.0.1:9090/manager/create" -d "name=dongbao&password=123456&tp=3"
+// @Router /web/manager/create/ [post]
+// curl -X POST "127.0.0.1:9090/web/manager/create" -d "name=dongbao&password=123456&tp=3"
+// curl -X POST "127.0.0.1:9090/debug/manager/create" -d "name=dongbao&password=123456&tp=3"
 func (p *ManagerHdl) Create(c *gin.Context) {
 	var form ManagerCreateForm
 	err := c.Bind(&form)
@@ -67,8 +66,8 @@ type ManagerListForm struct {
 // @Param   pageSize     query    int     true        "条数"
 // @Param   page      query    int     true        "页数"
 // @Success 200 object base.Response
-// @Router /manager/list/ [get]
-// curl -X GET "http://127.0.0.1:9090/manager/list?name=dongbao&page=1&pageSize=10"
+// @Router /web/manager/list/ [get]
+// curl -X GET "http://127.0.0.1:9090/web/manager/list?name=dongbao&page=1&pageSize=10"
 func (p *ManagerHdl) List(c *gin.Context) {
 	var form ManagerListForm
 	err := c.BindQuery(&form)
@@ -93,12 +92,12 @@ func (p *ManagerHdl) List(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-func (p *ManagerHdl) GetKey(id int) string {
+func (p *ManagerHdl) GetKey(id int64) string {
 	return fmt.Sprintf(global_const.ManagerKey, id)
 }
 
 func (p *ManagerHdl) Mid(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.String(http.StatusBadRequest, "参数错误")
 		c.Abort()
@@ -116,16 +115,17 @@ func (p *ManagerHdl) Mid(c *gin.Context) {
 	dongo_utils.ParisMap_Put(key, m)
 }
 
-// @获取指定用户
-// @Description get record by ID
+// @Summary 获取管理员信息
+// @Tags 管理用户
+// @Description 获取管理员信息
 // @Accept  json
 // @Produce json
-// @Param   some_id     path    int     true        "managerId"
+// @Param   id path int true "管理员id"
 // @Success 200 {string} string	"ok"
-// @Router /manager/{some_id} [get]
-// curl -X GET "http://127.0.0.1:9090/manager/1"
+// @Router /web/manager/{id} [get]
+// curl -X GET "http://127.0.0.1:9090/web/manager/1"
 func (p *ManagerHdl) Get(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.String(http.StatusBadRequest, "参数错误")
 		c.Abort()
@@ -144,9 +144,20 @@ type ManagerUpdateForm struct {
 	Tp       model.ManagerType `form:"tp" json:"tp"`             // 用户类型
 }
 
-// curl -X POST "127.0.0.1:9090/manager/1/edit" -d "name=dongbao2&password=123456&tp=3"
+// @Summary 编辑管理员信息
+// @Tags 管理用户
+// @Description 编辑管理员信息
+// @Accept  json
+// @Produce json
+// @Param   name     query    string     true        "用户名"
+// @Param   password     query    string     true        "密码"
+// @Param   tp      query    int     true        "用户类型"
+// @Param   id path int true "管理员id"
+// @Success 200 {string} string	"ok"
+// @Router /web/manager/{id}/edit [post]
+// curl -X POST "127.0.0.1:9090/web/manager/1/edit" -d "name=dongbao2&password=123456&tp=3"
 func (p *ManagerHdl) Update(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.String(http.StatusBadRequest, "参数错误")
 		c.Abort()
@@ -172,9 +183,17 @@ func (p *ManagerHdl) Update(c *gin.Context) {
 	c.String(http.StatusOK, "ok")
 }
 
-// curl -X POST "127.0.0.1:9090/manager/1/del" -d ""
+// @Summary 删除管理员
+// @Tags 管理用户
+// @Description 删除管理员
+// @Accept  json
+// @Produce json
+// @Param   id path int true "管理员id"
+// @Success 200 {string} string	"ok"
+// @Router /web/manager/{id}/del [post]
+// curl -X POST "127.0.0.1:9090/web/manager/1/del" -d ""
 func (p *ManagerHdl) Del(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.String(http.StatusBadRequest, "参数错误")
 		c.Abort()
@@ -198,8 +217,17 @@ type ManagerLoginForm struct {
 	Password string `form:"password" json:"password"` // 用户密码
 }
 
-// 登陆
-// curl -X POST 127.0.0.1:9090/manager/login -d "name=dongbao&password=123456"
+// @Summary 登陆用户
+// @Tags 管理用户
+// @Description 登陆用户
+// @Accept  json
+// @Produce json
+// @Param   name     query    string     true        "用户名"
+// @Param   password     query    string     true        "密码"
+// @Success 200 {string} string	"token:XXXXXXXX"
+// @Router /web/manager/{id}/edit [post]
+// curl -X POST 127.0.0.1:9090/web/manager/login -d "name=dongbao&password=123456"
+// curl -X POST 127.0.0.1:9090/base/manager/login -d "name=dongbao&password=123456"
 func (p *ManagerHdl) Login(c *gin.Context) {
 	var form ManagerLoginForm
 	err := c.Bind(&form)
@@ -208,31 +236,24 @@ func (p *ManagerHdl) Login(c *gin.Context) {
 		return
 	}
 
-	err = p.Service.Login(form.Name, form.Password)
+	u, err := p.Service.Login(form.Name, form.Password)
 	if err != nil {
 		c.String(http.StatusBadRequest, "登陆失败")
 		return
 	}
 
-	claims := &JWTClaims{
-		UserID:      1,
-		Username:    form.Name,
-		Password:    form.Password,
-		FullName:    form.Name,
-		Permissions: []string{},
-	}
-	claims.IssuedAt = time.Now().Unix()
-	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
-	signedToken, err := getToken(claims)
+	token, err := p.Service.EncodeToken(u)
 	if err != nil {
-		c.String(http.StatusBadRequest, err.Error())
+		c.String(http.StatusBadRequest, "登陆失败")
 		return
 	}
 
-	c.String(http.StatusOK, signedToken)
+	c.String(http.StatusOK, token)
 }
 
 // 登出
+// curl -X POST 127.0.0.1:9090/web/manager/login -d "name=dongbao&password=123456"
+// curl -X POST 127.0.0.1:9090/base/manager/login -d "name=dongbao&password=123456"
 func (p *ManagerHdl) Logout(c *gin.Context) {
 	c.String(http.StatusOK, "ok")
 }
@@ -245,4 +266,71 @@ func (p *ManagerHdl) Verify(c *gin.Context) {
 // 刷新令牌
 func (p *ManagerHdl) Refresh(c *gin.Context) {
 	c.String(http.StatusOK, "ok")
+}
+
+// context登陆校验用户
+// TODO fake-id情况处理
+// curl -X GET "http://127.0.0.1:9090/web/manager/list?name=dongbao&page=1&pageSize=10" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
+func (p *ManagerHdl) MidLogin(c *gin.Context) {
+	token := c.Request.Header.Get(global_const.ManagerWebHeaderKey)
+	if token == "" {
+		c.String(http.StatusBadRequest, "token非法")
+		c.Abort()
+		return
+	}
+
+	_, err := p.Service.DecodeToken(token)
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		c.Abort()
+		return
+	}
+}
+
+func (p *ManagerHdl) PathList(c *gin.Context) {
+
+}
+
+func (p *ManagerHdl) PathBind(c *gin.Context) {
+
+}
+
+func (p *ManagerHdl) PathUnBind(c *gin.Context) {
+
+}
+
+// context登陆校验用户
+// TODO fake-id情况处理
+func (p *ManagerHdl) IsSuperManager(c *gin.Context) {
+	token := c.Request.Header.Get(global_const.ManagerWebHeaderKey)
+	if token == "" {
+		c.String(http.StatusBadRequest, "token非法")
+		c.Abort()
+		return
+	}
+
+	m, err := p.Service.DecodeToken(token)
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		c.Abort()
+		return
+	}
+
+	if !m.IsSuper() {
+		c.String(http.StatusBadRequest, "超管权限")
+		c.Abort()
+		return
+	}
+}
+
+// context获取登陆用户
+func (p *ManagerHdl) GetCurrentManager(h *http.Request) *model.Manager {
+	token := h.Header.Get(global_const.ManagerWebHeaderKey)
+	if token != "" {
+		m, err := p.Service.DecodeToken(token)
+		if err == nil {
+			return m
+		}
+	}
+	return nil
 }

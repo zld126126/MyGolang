@@ -26,18 +26,18 @@ type ToolHdl struct {
 func (p *ToolHdl) UploadFile(c *gin.Context) {
 	rFile, err := c.FormFile("file")
 	if err != nil {
-		c.String(400, "文件格式错误")
+		c.String(http.StatusBadRequest, "文件格式错误")
 		return
 	}
 
 	if rFile.Size > global_const.FileMaxBytes {
-		c.String(400, "文件大小超过2M")
+		c.String(http.StatusBadRequest, "文件大小超过2M")
 		return
 	}
 
 	file, err := rFile.Open()
 	if err != nil {
-		c.String(400, "文件格式错误")
+		c.String(http.StatusBadRequest, "文件格式错误")
 		return
 	}
 	defer file.Close()
@@ -45,7 +45,7 @@ func (p *ToolHdl) UploadFile(c *gin.Context) {
 	for {
 		line, err := reader.Read()
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(http.StatusBadRequest, err.Error())
 			return
 		}
 		//line 就是每一行的内容
@@ -62,7 +62,7 @@ func (p *ToolHdl) DownloadReadFile(c *gin.Context) {
 	csvFileUrl := c.PostForm("file_name")
 	res, err := http.Get(csvFileUrl)
 	if err != nil {
-		c.String(400, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	defer res.Body.Close()
@@ -73,7 +73,7 @@ func (p *ToolHdl) DownloadReadFile(c *gin.Context) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			c.String(400, err.Error())
+			c.String(http.StatusBadRequest, err.Error())
 			return
 		}
 		//line 就是每一行的内容
@@ -90,7 +90,7 @@ func (p *ToolHdl) DownloadWriteFile(c *gin.Context) {
 	if !checkFileIsExist(filename) {
 		file, err := os.Create(filename) //创建文件
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(http.StatusBadRequest, err.Error())
 			return
 		}
 		buf := bufio.NewWriter(file) //创建新的 Writer 对象

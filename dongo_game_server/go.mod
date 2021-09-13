@@ -7,7 +7,6 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/dchest/captcha v0.0.0-20200903113550-03f5f0333e1f
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/spec v0.20.3 // indirect
@@ -27,8 +26,8 @@ require (
 	github.com/urfave/cli/v2 v2.3.0 // indirect
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
 	github.com/zld126126/dongo_utils v0.0.0-20210907122902-f403befc2516
-	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f
-	golang.org/x/sys v0.0.0-20210903071746-97244b99971b // indirect
+	golang.org/x/net v0.0.0-20210908191846-a5e095526f91
+	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/grpc v1.40.0

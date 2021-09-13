@@ -13,7 +13,7 @@ type SocketService struct {
 	DB *database.DB
 }
 
-func (p *SocketService) NewSocketConfig(port int) *model.SocketConfig {
+func (p *SocketService) NewSocketConfig(port int64) *model.SocketConfig {
 	t := dongo_utils.Tick64()
 	return &model.SocketConfig{
 		Port:      port,
@@ -24,7 +24,7 @@ func (p *SocketService) NewSocketConfig(port int) *model.SocketConfig {
 	}
 }
 
-func (p *SocketService) GetByPort(port int) (*model.SocketConfig, error) {
+func (p *SocketService) GetByPort(port int64) (*model.SocketConfig, error) {
 	var c model.SocketConfig
 	err := p.DB.Gorm.Table("socket_configs sc").Where(`sc.port = ?`, port).Scan(&c).Error
 	if err != nil {
@@ -54,7 +54,7 @@ func (p *SocketService) Save(c *model.SocketConfig) error {
 	return nil
 }
 
-func (p *SocketService) GetInUsePort(projectId int) (int, error) {
+func (p *SocketService) GetInUsePort(projectId int64) (int, error) {
 	type Result struct {
 		Port int
 	}
@@ -74,9 +74,9 @@ func (p *SocketService) GetInUsePort(projectId int) (int, error) {
 	return res.Port, nil
 }
 
-func (p *SocketService) GetAvailablePort(projectId int) (int, error) {
+func (p *SocketService) GetAvailablePort(projectId int64) (int64, error) {
 	type Result struct {
-		Port int
+		Port int64
 	}
 	var res Result
 	err := p.DB.Gorm.Table("socket_configs sc").
@@ -93,7 +93,7 @@ func (p *SocketService) GetAvailablePort(projectId int) (int, error) {
 	return res.Port, nil
 }
 
-func (p *SocketService) UsePort(port int, projectId int) error {
+func (p *SocketService) UsePort(port int64, projectId int64) error {
 	config, err := p.GetByPort(port)
 	if err != nil {
 		return err

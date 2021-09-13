@@ -25,6 +25,75 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/captcha": {
+            "get": {
+                "description": "获取验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "验证码"
+                ],
+                "summary": "获取验证码",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CaptchaResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/captcha/image": {
+            "get": {
+                "description": "获取验证码图片",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "验证码"
+                ],
+                "summary": "获取验证码图片",
+                "responses": {
+                    "200": {
+                        "description": "图片地址",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/captcha/verify": {
+            "post": {
+                "description": "校验验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "验证码"
+                ],
+                "summary": "校验验证码",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/manager/create/": {
             "post": {
                 "description": "创建管理用户",
@@ -117,24 +186,51 @@ var doc = `{
                 }
             }
         },
-        "/manager/{some_id}": {
+        "/manager/{id}": {
             "get": {
-                "description": "get record by ID",
+                "description": "获取管理员信息\nget record by ID",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "管理用户"
+                ],
+                "summary": "获取管理员信息",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "managerId",
-                        "name": "some_id",
+                        "description": "管理员id",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/version": {
+            "get": {
+                "description": "获取版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "获取版本"
+                ],
+                "summary": "获取版本",
                 "responses": {
                     "200": {
                         "description": "ok",
@@ -151,16 +247,33 @@ var doc = `{
             "type": "object",
             "properties": {
                 "data": {
+                    "description": "数据",
                     "type": "object"
                 },
                 "page": {
+                    "description": "页数",
                     "type": "integer"
                 },
                 "pageSize": {
+                    "description": "每页条数",
                     "type": "integer"
                 },
                 "total": {
+                    "description": "总条数",
                     "type": "integer"
+                }
+            }
+        },
+        "controller.CaptchaResponse": {
+            "type": "object",
+            "properties": {
+                "captchaId": {
+                    "description": "验证码Id",
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "description": "验证码图片url",
+                    "type": "string"
                 }
             }
         }

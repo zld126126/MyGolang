@@ -19,8 +19,14 @@ type CaptchaResponse struct {
 	ImageUrl  string `json:"imageUrl"`  //验证码图片url
 }
 
-//1.获取验证码
-//http://localhost:9090/captcha
+// @Summary 获取验证码
+// @Tags 验证码
+// @Description 获取验证码
+// @Accept  json
+// @Produce  json
+// @Success 200 object CaptchaResponse
+// @Router /base/captcha [get]
+// curl -X GET "http://127.0.0.1:9090/base/captcha"
 func (p *CaptchaHdl) GetCaptcha(c *gin.Context) {
 	length := captcha.DefaultLen
 	captchaId := captcha.NewLen(length)
@@ -30,16 +36,28 @@ func (p *CaptchaHdl) GetCaptcha(c *gin.Context) {
 	c.JSON(http.StatusOK, captcha)
 }
 
-//2.获取验证码图片
-//http://localhost:9090/captcha/image/DwnpX607FGbibpyBxvrx.png
+// @Summary 获取验证码图片
+// @Tags 验证码
+// @Description 获取验证码图片
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"图片地址"
+// @Router /base/captcha/image [get]
+// curl -X GET "http://127.0.0.1:9090/base/captcha/image/XXX.png"
 func (p *CaptchaHdl) GetCaptchaImg(c *gin.Context) {
 	captchaId := c.Param("captchaId")
 	logrus.Println("GetCaptchaPng : " + captchaId)
-	p.ServeHTTP(c.Writer, c.Request)
+	p.serveHTTP(c.Writer, c.Request)
 }
 
-//3.验证
-//http://localhost:9090/verify/dVCqYbq7r2olKZfEtTvo/647489
+// @Summary 校验验证码
+// @Tags 验证码
+// @Description 校验验证码
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"ok"
+// @Router /base/captcha/verify [post]
+// curl -X POST "http://127.0.0.1:9090/base/captcha/verify/dVCqYbq7r2olKZfEtTvo/647489
 func (p *CaptchaHdl) VerifyCaptcha(c *gin.Context) {
 	captchaId := c.Param("captchaId")
 	value := c.Param("value")
@@ -53,7 +71,7 @@ func (p *CaptchaHdl) VerifyCaptcha(c *gin.Context) {
 	}
 }
 
-func (p *CaptchaHdl) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (p *CaptchaHdl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	dir, file := path.Split(r.URL.Path)
 	ext := path.Ext(file)
 	id := file[:len(file)-len(ext)]
@@ -68,12 +86,12 @@ func (p *CaptchaHdl) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	lang := strings.ToLower(r.FormValue("lang"))
 	download := path.Base(dir) == "download"
-	if p.Serve(w, r, id, ext, lang, download, captcha.StdWidth, captcha.StdHeight) == captcha.ErrNotFound {
+	if p.serve(w, r, id, ext, lang, download, captcha.StdWidth, captcha.StdHeight) == captcha.ErrNotFound {
 		http.NotFound(w, r)
 	}
 }
 
-func (p *CaptchaHdl) Serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, download bool, width, height int) error {
+func (p *CaptchaHdl) serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, download bool, width, height int) error {
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Pragma", "no-cache")
 	w.Header().Set("Expires", "0")
