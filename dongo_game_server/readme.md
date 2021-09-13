@@ -1,26 +1,4 @@
 # dongo_game_server 开发计划
-    安装所需类库:
-        go get 
-
-        github.com/BurntSushi/toml
-        github.com/dchest/captcha
-        github.com/deckarep/golang-set
-        github.com/dgrijalva/jwt-go
-        github.com/gin-gonic/gin
-        github.com/go-gomail/gomail
-        github.com/golang/protobuf
-        github.com/google/wire
-        github.com/jinzhu/copier
-        github.com/jinzhu/gorm
-        github.com/pkg/errors
-        github.com/robfig/cron
-        github.com/sirupsen/logrus
-        github.com/spf13/viper
-        golang.org/x/net v0.0.0-20210825183410-e898025ed96a
-        google.golang.org/grpc
-        google.golang.org/protobuf
-        gopkg.in/alexcesaro/quotedprintable.v3
-    
     安装protobuf
         1.brew install protobuf
         2.protoc --version
@@ -33,13 +11,21 @@
         1.protoc --go_out=plugins=grpc:. *.proto
 
 ## 功能:
-    1 用户系统 √ --基本完成
-    2 聊天系统 
-    3 资源系统
-    4 token鉴权系统 √ --基本完成
-    5 socket http proto服务系统 √ --基本完成
-    6 邮件系统
-    7 打点系统
+    1 网页系统 
+        1.1 用户登录管理系统
+        1.2 项目系统
+        1.3 数据统计系统
+        1.4 Api对接文档 √
+    
+    2 客户端系统 
+        2.1 采集数据
+        2.2 socket/http/rpc 连接 √
+        2.3 静态资源获取
+        2.4 Lua 脚本 √
+        
+    3 支持系统
+        3.1 定时邮件任务
+        
 
 ## 问题:
     Type definition of type ‘*ast.InterfaceType’ is not supported yet. Using ‘object’ instead.
