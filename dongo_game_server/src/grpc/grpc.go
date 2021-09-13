@@ -12,13 +12,13 @@ import (
 )
 
 // 通过一个结构体，实现proto中定义的所有服务
-type GrpcApp struct {
-	DB              *database.DB
-	GrpcUserService *config.GrpcConfig
+type RpcApp struct {
+	DB          *database.DB
+	UserService *config.GrpcConfig
 }
 
-func (p *GrpcApp) Start() {
-	listen, err := net.Listen("tcp", p.GrpcUserService.UserServiceAddr) // Address gRPC服务地址
+func (p *RpcApp) Start() {
+	listen, err := net.Listen("tcp", p.UserService.UserServiceAddr) // Address gRPC服务地址
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 		dongo_utils.Chk(err)

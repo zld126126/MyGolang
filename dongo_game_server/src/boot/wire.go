@@ -47,9 +47,9 @@ func InitWeb() (*web.WebApp, error) {
 	))
 }
 
-func InitGrpc() (*grpc.GrpcApp, error) {
+func InitGrpc() (*grpc.RpcApp, error) {
 	panic(wire.Build(
-		wire.Struct(new(grpc.GrpcApp), "*"),
+		wire.Struct(new(grpc.RpcApp), "*"),
 		configSet,
 		config.NewDatabase_Grpc,
 	))

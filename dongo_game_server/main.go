@@ -9,15 +9,15 @@ import (
 )
 
 func Application() {
-	// grpc init
-	grpcApp, err := boot.InitGrpc()
+	// GoRpc init
+	rpcApp, err := boot.InitGrpc()
 	if err != nil {
 		log.Fatal(err)
 		dongo_utils.Chk(err)
 	}
 
-	// grpc start
-	go grpcApp.Start()
+	// GoRpc start
+	go rpcApp.Start()
 
 	// support init
 	supportApp, err := boot.InitSupport()

@@ -76,15 +76,15 @@ func InitWeb() (*web.WebApp, error) {
 	return webApp, nil
 }
 
-func InitGrpc() (*grpc.GrpcApp, error) {
+func InitGrpc() (*grpc.RpcApp, error) {
 	configConfig := config.DefaultConfig()
 	db := config.NewDatabase_Grpc(configConfig)
 	grpcConfig := config.DefaultGrpcConfig(configConfig)
-	grpcApp := &grpc.GrpcApp{
-		DB:              db,
-		GrpcUserService: grpcConfig,
+	rpcApp := &grpc.RpcApp{
+		DB:          db,
+		UserService: grpcConfig,
 	}
-	return grpcApp, nil
+	return rpcApp, nil
 }
 
 func InitSupport() (*support.SupportApp, error) {
