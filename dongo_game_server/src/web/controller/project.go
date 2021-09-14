@@ -18,7 +18,7 @@ type ProjectCreateForm struct {
 }
 
 // 项目创建
-// curl -X POST "127.0.0.1:9090/project/create" -d "name=dongbao&resource_path=/dongbao&rest_api=/dongbao"
+// curl -X POST "127.0.0.1:9090/project/create" -d "name=dongbao&resource_path=/dongbao&rest_api=/dongbao" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ProjectHdl) Create(c *gin.Context) {
 	var form ProjectCreateForm
 	err := c.Bind(&form)

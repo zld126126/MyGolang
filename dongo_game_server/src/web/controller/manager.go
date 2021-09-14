@@ -6,10 +6,11 @@ import (
 	"dongo_game_server/src/web/base"
 	"dongo_game_server/src/web/service"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/zld126126/dongo_utils/dongo_utils"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type ManagerHdl struct {
@@ -32,7 +33,7 @@ type ManagerCreateForm struct {
 // @Param   tp      query    int     true        "用户类型"
 // @Success 200 {string} string	"ok"
 // @Router /web/manager/create/ [post]
-// curl -X POST "127.0.0.1:9090/web/manager/create" -d "name=dongbao&password=123456&tp=3"
+// curl -X POST "127.0.0.1:9090/web/manager/create" -d "name=dongbao&password=123456&tp=3" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 // curl -X POST "127.0.0.1:9090/debug/manager/create" -d "name=dongbao&password=123456&tp=3"
 func (p *ManagerHdl) Create(c *gin.Context) {
 	var form ManagerCreateForm
@@ -65,9 +66,9 @@ type ManagerListForm struct {
 // @Param   name     query    string     true        "用户名"
 // @Param   pageSize     query    int     true        "条数"
 // @Param   page      query    int     true        "页数"
-// @Success 200 object base.Response
+// @Success 200 object base.ListResponse
 // @Router /web/manager/list/ [get]
-// curl -X GET "http://127.0.0.1:9090/web/manager/list?name=dongbao&page=1&pageSize=10"
+// curl -X GET "http://127.0.0.1:9090/web/manager/list?name=dongbao&page=1&pageSize=10" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ManagerHdl) List(c *gin.Context) {
 	var form ManagerListForm
 	err := c.BindQuery(&form)
@@ -82,7 +83,7 @@ func (p *ManagerHdl) List(c *gin.Context) {
 		return
 	}
 
-	res := &base.Response{
+	res := &base.ListResponse{
 		Total:    total,
 		Data:     l,
 		Page:     form.Page,
@@ -123,7 +124,7 @@ func (p *ManagerHdl) Mid(c *gin.Context) {
 // @Param   id path int true "管理员id"
 // @Success 200 {string} string	"ok"
 // @Router /web/manager/{id} [get]
-// curl -X GET "http://127.0.0.1:9090/web/manager/1"
+// curl -X GET "http://127.0.0.1:9090/web/manager/1" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ManagerHdl) Get(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -155,7 +156,7 @@ type ManagerUpdateForm struct {
 // @Param   id path int true "管理员id"
 // @Success 200 {string} string	"ok"
 // @Router /web/manager/{id}/edit [post]
-// curl -X POST "127.0.0.1:9090/web/manager/1/edit" -d "name=dongbao2&password=123456&tp=3"
+// curl -X POST "127.0.0.1:9090/web/manager/1/edit" -d "name=dongbao2&password=123456&tp=3" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ManagerHdl) Update(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -191,7 +192,7 @@ func (p *ManagerHdl) Update(c *gin.Context) {
 // @Param   id path int true "管理员id"
 // @Success 200 {string} string	"ok"
 // @Router /web/manager/{id}/del [post]
-// curl -X POST "127.0.0.1:9090/web/manager/1/del" -d ""
+// curl -X POST "127.0.0.1:9090/web/manager/1/del" -d "" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ManagerHdl) Del(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -226,7 +227,7 @@ type ManagerLoginForm struct {
 // @Param   password     query    string     true        "密码"
 // @Success 200 {string} string	"token:XXXXXXXX"
 // @Router /web/manager/{id}/edit [post]
-// curl -X POST 127.0.0.1:9090/web/manager/login -d "name=dongbao&password=123456"
+// curl -X POST 127.0.0.1:9090/web/manager/login -d "name=dongbao&password=123456" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 // curl -X POST 127.0.0.1:9090/base/manager/login -d "name=dongbao&password=123456"
 func (p *ManagerHdl) Login(c *gin.Context) {
 	var form ManagerLoginForm
@@ -251,25 +252,47 @@ func (p *ManagerHdl) Login(c *gin.Context) {
 	c.String(http.StatusOK, token)
 }
 
-// 登出
-// curl -X POST 127.0.0.1:9090/web/manager/login -d "name=dongbao&password=123456"
-// curl -X POST 127.0.0.1:9090/base/manager/login -d "name=dongbao&password=123456"
+// @Summary 登出用户
+// @Tags 管理用户
+// @Description 登出用户
+// @Accept  json
+// @Produce json
+// @Success 200 {string} string	"ok"
+// @Router /web/manager/{id}/edit [post]
+// curl -X POST 127.0.0.1:9090/web/manager/logout -d "" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
+// curl -X POST 127.0.0.1:9090/base/manager/logout -d ""
 func (p *ManagerHdl) Logout(c *gin.Context) {
+	// TODO 暂时前端简单处理 返回index页面
 	c.String(http.StatusOK, "ok")
 }
 
-// 验证
-func (p *ManagerHdl) Verify(c *gin.Context) {
-	c.String(http.StatusOK, "ok")
-}
-
-// 刷新令牌
+// @Summary 刷新令牌
+// @Tags 管理用户
+// @Description 刷新令牌
+// @Accept  json
+// @Produce json
+// @Param   name     query    string     true        "用户名"
+// @Param   password     query    string     true        "密码"
+// @Success 200 {string} string	"token:XXXXXXXX"
+// @Router /web/manager/{id}/edit [post]
+// curl -X POST 127.0.0.1:9090/web/manager/login -d "name=dongbao&password=123456" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ManagerHdl) Refresh(c *gin.Context) {
-	c.String(http.StatusOK, "ok")
+	u := GetCurrentManager(c.Request, p.Service)
+	if u == nil {
+		c.String(http.StatusBadRequest, "token无效")
+		return
+	}
+
+	token, err := p.Service.EncodeToken(u)
+	if err != nil {
+		c.String(http.StatusBadRequest, "登陆失败")
+		return
+	}
+
+	c.String(http.StatusOK, token)
 }
 
 // context登陆校验用户
-// TODO fake-id情况处理
 // curl -X GET "http://127.0.0.1:9090/web/manager/list?name=dongbao&page=1&pageSize=10" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ManagerHdl) MidLogin(c *gin.Context) {
 	token := c.Request.Header.Get(global_const.ManagerWebHeaderKey)
@@ -324,10 +347,10 @@ func (p *ManagerHdl) IsSuperManager(c *gin.Context) {
 }
 
 // context获取登陆用户
-func (p *ManagerHdl) GetCurrentManager(h *http.Request) *model.Manager {
+func GetCurrentManager(h *http.Request, service *service.ManagerService) *model.Manager {
 	token := h.Header.Get(global_const.ManagerWebHeaderKey)
 	if token != "" {
-		m, err := p.Service.DecodeToken(token)
+		m, err := service.DecodeToken(token)
 		if err == nil {
 			return m
 		}

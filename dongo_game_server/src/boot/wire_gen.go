@@ -20,11 +20,9 @@ import (
 func InitWeb() (*web.WebApp, error) {
 	configConfig := config.DefaultConfig()
 	userServiceClient := config.DefaultUserServiceRpc(configConfig)
-	db := config.NewDatabaseWeb(configConfig)
-	baseHdl := &controller.BaseHdl{
-		DB: db,
-	}
+	baseHdl := &controller.BaseHdl{}
 	captchaHdl := &controller.CaptchaHdl{}
+	db := config.NewDatabaseWeb(configConfig)
 	managerService := &service.ManagerService{
 		DB: db,
 	}

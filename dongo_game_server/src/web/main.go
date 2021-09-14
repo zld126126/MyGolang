@@ -99,6 +99,7 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 			manager.POST("/login", p.Manager.Login)
 			manager.POST("/logout ", p.Manager.Logout)
 			manager.GET("/list", p.Manager.List)
+			manager.GET("/refresh", p.Manager.Refresh)
 			m := manager.Group("/:id", p.Manager.Mid)
 			{
 				m.GET("", p.Manager.Get)

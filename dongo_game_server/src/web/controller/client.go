@@ -12,7 +12,3 @@ type ClientHdl struct {
 func (p *ClientHdl) HttpTrackCollect(c *gin.Context) {
 
 }
-
-func (p *ClientHdl) RpcTrackCollect(c *gin.Context) {
-
-}

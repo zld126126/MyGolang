@@ -72,12 +72,20 @@ func connPostgres(db *Database) string {
 func (p *DB) InitWebModel() error {
 	logrus.Println(`InitWebModel start`)
 	models := []interface{}{
+		model.SocketConfig{},
+
 		model.Manager{},
-		model.Project{},
+		model.ManagerPath{},
+		model.ManagerPathRelation{},
+
 		model.Track{},
 		model.TrackItem{},
+
 		model.Consumer{},
-		model.SocketConfig{},
+		model.ConsumerItem{},
+
+		model.Project{},
+		model.ProjectConsumerRelation{},
 	}
 	err := p.Gorm.Debug().AutoMigrate(models...).Error
 	if err != nil {

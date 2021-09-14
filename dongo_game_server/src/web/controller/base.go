@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"dongo_game_server/src/database"
 	"dongo_game_server/src/global_const"
 	"fmt"
 	"net/http"
@@ -15,9 +14,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type BaseHdl struct {
-	DB *database.DB
-}
+type BaseHdl struct{}
 
 // @Summary 获取版本
 // @Tags 获取版本

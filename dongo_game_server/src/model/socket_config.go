@@ -3,9 +3,9 @@ package model
 type SocketStatus int32 // socket运行状态
 
 const (
-	SocketStatus_Unknown SocketStatus = iota // 未知状态
-	SocketStatus_Run                         // 启动
-	SocketStatus_Stop                        // 停止
+	SocketStatusUnknown SocketStatus = iota // 未知状态
+	SocketStatusRun                         // 启动
+	SocketStatusStop                        // 停止
 )
 
 // socket 配置类

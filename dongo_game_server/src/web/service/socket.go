@@ -19,7 +19,7 @@ func (p *SocketService) NewSocketConfig(port int64) *model.SocketConfig {
 	return &model.SocketConfig{
 		Port:      port,
 		ProjectId: 0,
-		Status:    model.SocketStatus_Stop,
+		Status:    model.SocketStatusStop,
 		Ct:        t,
 		Mt:        t,
 	}
@@ -62,7 +62,7 @@ func (p *SocketService) GetInUsePort(projectId int64) (int, error) {
 	var res Result
 	err := p.DB.Gorm.Table("socket_configs sc").
 		Where(`sc.project_id = ?`, projectId).
-		Where(`sc.status = ?`, model.SocketStatus_Run).
+		Where(`sc.status = ?`, model.SocketStatusRun).
 		Select("sc.port").
 		Scan(&res).
 		Error
@@ -82,7 +82,7 @@ func (p *SocketService) GetAvailablePort(projectId int64) (int64, error) {
 	var res Result
 	err := p.DB.Gorm.Table("socket_configs sc").
 		Where(`sc.project_id = 0`).
-		Where(`sc.status = ?`, model.SocketStatus_Stop).
+		Where(`sc.status = ?`, model.SocketStatusStop).
 		Order("sc.port asc").
 		Select("sc.port").
 		Limit(1).
@@ -119,7 +119,7 @@ func (p *SocketService) InitPort() {
 
 		if c != nil {
 			c.Mt = dongo_utils.Tick64()
-			c.Status = model.SocketStatus_Stop
+			c.Status = model.SocketStatusStop
 			c.ProjectId = 0
 			err = p.Save(c)
 			if err != nil {
