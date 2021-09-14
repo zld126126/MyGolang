@@ -7,6 +7,7 @@ type Project struct {
 	Token        string `gorm:"not null" json:"token"`           // Token刷新令牌
 	RestApi      string `gorm:"default:''" json:"rest_api"`      // HttpRestApi 例如/:id
 	ResourcePath string `gorm:"default:''" json:"resource_path"` // 静态资源根目录
+	Port         int64  `gorm:"not null" json:"port"`            // 端口号
 	Ct           int64  `gorm:"default:0" json:"ct"`             // 创建时间
 	Dt           int64  `gorm:"default:0" json:"dt"`             // 删除时间
 	Mt           int64  `gorm:"default:0" json:"mt"`             // 修改时间

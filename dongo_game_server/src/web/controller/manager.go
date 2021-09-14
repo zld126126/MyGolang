@@ -122,7 +122,7 @@ func (p *ManagerHdl) Mid(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param   id path int true "管理员id"
-// @Success 200 {string} string	"ok"
+// @Success 200 object base.Response
 // @Router /web/manager/{id} [get]
 // curl -X GET "http://127.0.0.1:9090/web/manager/1" -H "ManagerWebHeaderKey: MXx8MTYzMTYxMjUxMTA0MQ=="
 func (p *ManagerHdl) Get(c *gin.Context) {
@@ -136,7 +136,7 @@ func (p *ManagerHdl) Get(c *gin.Context) {
 	key := p.GetKey(id)
 	m := dongo_utils.ParisMap_Get(key).(*model.Manager)
 
-	c.JSON(http.StatusOK, m)
+	c.JSON(http.StatusOK, &base.Response{Data: m})
 }
 
 type ManagerUpdateForm struct {

@@ -1,5 +1,5 @@
 definitions:
-  base.Response:
+  base.ListResponse:
     properties:
       data:
         description: 数据
@@ -13,6 +13,12 @@ definitions:
       total:
         description: 总条数
         type: integer
+    type: object
+  base.Response:
+    properties:
+      data:
+        description: 数据
+        type: object
     type: object
   controller.CaptchaResponse:
     properties:
@@ -102,9 +108,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/base.Response'
       summary: 获取管理员信息
       tags:
       - 管理用户
@@ -133,7 +139,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 登陆用户
+      description: 刷新令牌
       parameters:
       - description: 用户名
         in: query
@@ -152,7 +158,7 @@ paths:
           description: token:XXXXXXXX
           schema:
             type: string
-      summary: 登陆用户
+      summary: 刷新令牌
       tags:
       - 管理用户
   /web/manager/create/:
@@ -213,8 +219,179 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/base.Response'
+            $ref: '#/definitions/base.ListResponse'
       summary: 获取所有管理用户
       tags:
       - 管理用户
+  /web/project/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取项目信息
+      parameters:
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/base.Response'
+      summary: 获取项目信息
+      tags:
+      - 管理项目
+  /web/project/{id}/del:
+    post:
+      consumes:
+      - application/json
+      description: 删除项目
+      parameters:
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 删除项目
+      tags:
+      - 管理项目
+  /web/project/{id}/edit:
+    post:
+      consumes:
+      - application/json
+      description: 编辑项目信息
+      parameters:
+      - description: 项目名称
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: 资源
+        in: query
+        name: resource_path
+        required: true
+        type: string
+      - description: 项目api
+        in: query
+        name: rest_api
+        required: true
+        type: string
+      - description: 端口号
+        in: query
+        name: port
+        required: true
+        type: integer
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 编辑项目信息
+      tags:
+      - 管理项目
+  /web/project/{id}/refreshToken:
+    post:
+      consumes:
+      - application/json
+      description: 刷新项目token
+      parameters:
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 刷新项目token
+      tags:
+      - 管理项目
+  /web/project/create/:
+    post:
+      consumes:
+      - application/json
+      description: 项目创建
+      parameters:
+      - description: 项目名称
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: 资源
+        in: query
+        name: resource_path
+        required: true
+        type: string
+      - description: 项目api
+        in: query
+        name: rest_api
+        required: true
+        type: string
+      - description: 端口号
+        in: query
+        name: port
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 项目创建
+      tags:
+      - 管理项目
+  /web/project/list/:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有项目
+      parameters:
+      - description: 项目名
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: 条数
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      - description: 页数
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/base.ListResponse'
+      summary: 获取所有项目
+      tags:
+      - 管理项目
 swagger: "2.0"

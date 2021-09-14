@@ -183,7 +183,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/base.Response"
+                            "$ref": "#/definitions/base.ListResponse"
                         }
                     }
                 }
@@ -213,9 +213,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/base.Response"
                         }
                     }
                 }
@@ -255,7 +255,7 @@
         },
         "/web/manager/{id}/edit": {
             "post": {
-                "description": "登陆用户",
+                "description": "刷新令牌",
                 "consumes": [
                     "application/json"
                 ],
@@ -265,7 +265,7 @@
                 "tags": [
                     "管理用户"
                 ],
-                "summary": "登陆用户",
+                "summary": "刷新令牌",
                 "parameters": [
                     {
                         "type": "string",
@@ -291,10 +291,265 @@
                     }
                 }
             }
+        },
+        "/web/project/create/": {
+            "post": {
+                "description": "项目创建",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理项目"
+                ],
+                "summary": "项目创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "项目名称",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "资源",
+                        "name": "resource_path",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "项目api",
+                        "name": "rest_api",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "端口号",
+                        "name": "port",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/project/list/": {
+            "get": {
+                "description": "获取所有项目",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理项目"
+                ],
+                "summary": "获取所有项目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "项目名",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "条数",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页数",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/base.ListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/project/{id}": {
+            "get": {
+                "description": "获取项目信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理项目"
+                ],
+                "summary": "获取项目信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "项目id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/base.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/project/{id}/del": {
+            "post": {
+                "description": "删除项目",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理项目"
+                ],
+                "summary": "删除项目",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "项目id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/project/{id}/edit": {
+            "post": {
+                "description": "编辑项目信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理项目"
+                ],
+                "summary": "编辑项目信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "项目名称",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "资源",
+                        "name": "resource_path",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "项目api",
+                        "name": "rest_api",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "端口号",
+                        "name": "port",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "项目id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/project/{id}/refreshToken": {
+            "post": {
+                "description": "刷新项目token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理项目"
+                ],
+                "summary": "刷新项目token",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "项目id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "base.Response": {
+        "base.ListResponse": {
             "type": "object",
             "properties": {
                 "data": {
@@ -312,6 +567,15 @@
                 "total": {
                     "description": "总条数",
                     "type": "integer"
+                }
+            }
+        },
+        "base.Response": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "数据",
+                    "type": "object"
                 }
             }
         },

@@ -16,6 +16,9 @@ const (
 	ManagerWebHeaderKey    = `ManagerWebHeaderKey`    // web登陆 自定义HeaderKey
 	ManagerClientHeaderKey = `ManagerClientHeaderKey` // client登陆 自定义HeaderKey
 
+	ProjectTokenSalt = `ProjectTokenSalt` // 项目token Salt
+	ProjectKey       = `ProjectKey_%d`    // 用户session key
+
 	FakeIdDebugKey = `Fake-Id`  // fake登陆 自定义HeaderKey
 	FakeIdAdmin    = `YWRtaW4=` // fake登陆 debug模式
 

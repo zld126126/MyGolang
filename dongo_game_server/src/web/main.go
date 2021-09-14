@@ -114,6 +114,14 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 		project := webGroup.Group("/project")
 		{
 			project.POST("/create", p.Project.Create)
+			project.GET("/list", p.Project.List)
+			m := project.Group("/:id", p.Project.Mid)
+			{
+				m.GET("", p.Project.Get)
+				m.POST("/edit", p.Project.Update)
+				m.POST("/del", p.Project.Del)
+				m.POST("/refreshToken", p.Project.RefreshToken)
+			}
 		}
 
 		webGroup.GET("/email", p.Tool.SendEmail)
