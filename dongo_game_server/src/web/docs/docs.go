@@ -25,7 +25,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/captcha": {
+        "/base/captcha": {
             "get": {
                 "description": "获取验证码",
                 "consumes": [
@@ -48,7 +48,7 @@ var doc = `{
                 }
             }
         },
-        "/captcha/image": {
+        "/base/captcha/image": {
             "get": {
                 "description": "获取验证码图片",
                 "consumes": [
@@ -71,7 +71,7 @@ var doc = `{
                 }
             }
         },
-        "/captcha/verify": {
+        "/base/captcha/verify": {
             "post": {
                 "description": "校验验证码",
                 "consumes": [
@@ -94,7 +94,30 @@ var doc = `{
                 }
             }
         },
-        "/manager/create/": {
+        "/base/version": {
+            "get": {
+                "description": "获取版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "获取版本"
+                ],
+                "summary": "获取版本",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/manager/create/": {
             "post": {
                 "description": "创建管理用户",
                 "consumes": [
@@ -140,7 +163,7 @@ var doc = `{
                 }
             }
         },
-        "/manager/list/": {
+        "/web/manager/list/": {
             "get": {
                 "description": "获取所有管理用户",
                 "consumes": [
@@ -186,9 +209,9 @@ var doc = `{
                 }
             }
         },
-        "/manager/{id}": {
+        "/web/manager/{id}": {
             "get": {
-                "description": "获取管理员信息\nget record by ID",
+                "description": "获取管理员信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -218,9 +241,9 @@ var doc = `{
                 }
             }
         },
-        "/version": {
-            "get": {
-                "description": "获取版本",
+        "/web/manager/{id}/del": {
+            "post": {
+                "description": "删除管理员",
                 "consumes": [
                     "application/json"
                 ],
@@ -228,12 +251,60 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "获取版本"
+                    "管理用户"
                 ],
-                "summary": "获取版本",
+                "summary": "删除管理员",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "管理员id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/manager/{id}/edit": {
+            "post": {
+                "description": "登陆用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理用户"
+                ],
+                "summary": "登陆用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "token:XXXXXXXX",
                         "schema": {
                             "type": "string"
                         }

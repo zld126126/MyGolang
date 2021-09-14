@@ -27,7 +27,7 @@ info:
   contact: {}
   license: {}
 paths:
-  /captcha:
+  /base/captcha:
     get:
       consumes:
       - application/json
@@ -42,7 +42,7 @@ paths:
       summary: 获取验证码
       tags:
       - 验证码
-  /captcha/image:
+  /base/captcha/image:
     get:
       consumes:
       - application/json
@@ -57,7 +57,7 @@ paths:
       summary: 获取验证码图片
       tags:
       - 验证码
-  /captcha/verify:
+  /base/captcha/verify:
     post:
       consumes:
       - application/json
@@ -72,13 +72,26 @@ paths:
       summary: 校验验证码
       tags:
       - 验证码
-  /manager/{id}:
+  /base/version:
     get:
       consumes:
       - application/json
-      description: |-
-        获取管理员信息
-        get record by ID
+      description: 获取版本
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 获取版本
+      tags:
+      - 获取版本
+  /web/manager/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取管理员信息
       parameters:
       - description: 管理员id
         in: path
@@ -95,7 +108,54 @@ paths:
       summary: 获取管理员信息
       tags:
       - 管理用户
-  /manager/create/:
+  /web/manager/{id}/del:
+    post:
+      consumes:
+      - application/json
+      description: 删除管理员
+      parameters:
+      - description: 管理员id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 删除管理员
+      tags:
+      - 管理用户
+  /web/manager/{id}/edit:
+    post:
+      consumes:
+      - application/json
+      description: 登陆用户
+      parameters:
+      - description: 用户名
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token:XXXXXXXX
+          schema:
+            type: string
+      summary: 登陆用户
+      tags:
+      - 管理用户
+  /web/manager/create/:
     post:
       consumes:
       - application/json
@@ -126,7 +186,7 @@ paths:
       summary: 创建管理用户
       tags:
       - 管理用户
-  /manager/list/:
+  /web/manager/list/:
     get:
       consumes:
       - application/json
@@ -157,19 +217,4 @@ paths:
       summary: 获取所有管理用户
       tags:
       - 管理用户
-  /version:
-    get:
-      consumes:
-      - application/json
-      description: 获取版本
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: 获取版本
-      tags:
-      - 获取版本
 swagger: "2.0"
