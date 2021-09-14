@@ -1,14 +1,13 @@
 package controller
 
 import (
+	"bytes"
 	"dongo_game_server/src/web/service"
 	"fmt"
-	"net"
-	"net/http"
-	"strings"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"net"
+	"net/http"
 )
 
 type SocketHdl struct {
@@ -23,6 +22,7 @@ type SocketCreateForm struct {
 func (p *SocketHdl) HandleSocket(conn net.Conn) {
 	defer conn.Close() //关闭连接
 	logrus.Println("Connect :", conn.RemoteAddr())
+	var dataBuffer bytes.Buffer
 	for {
 		//只要客户端没有断开连接，一直保持连接，读取数据
 		data := make([]byte, 2048)
@@ -38,12 +38,18 @@ func (p *SocketHdl) HandleSocket(conn net.Conn) {
 		}
 		logrus.Printf("Receive data [%s] from [%s]", string(data[:n]), conn.RemoteAddr())
 		//转大写
-		rspData := strings.ToUpper(string(data[:n]))
-		_, err = conn.Write([]byte(rspData))
+		rspData := string(data[:n])
+
+		_, err = dataBuffer.Write([]byte(rspData))
 		if err != nil {
 			logrus.Println(err)
 			continue
 		}
+	}
+	fmt.Printf(dataBuffer.String())
+	// 重置buffer
+	if dataBuffer.Len() != 0 {
+		dataBuffer.Reset()
 	}
 }
 

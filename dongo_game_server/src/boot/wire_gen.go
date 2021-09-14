@@ -19,8 +19,8 @@ import (
 
 func InitWeb() (*web.WebApp, error) {
 	configConfig := config.DefaultConfig()
-	userServiceClient := config.Grpc_DefaultUserService(configConfig)
-	db := config.NewDatabase_Web(configConfig)
+	userServiceClient := config.DefaultUserServiceRpc(configConfig)
+	db := config.NewDatabaseWeb(configConfig)
 	baseHdl := &controller.BaseHdl{
 		DB: db,
 	}
@@ -40,16 +40,6 @@ func InitWeb() (*web.WebApp, error) {
 	resourceHdl := &controller.ResourceHdl{
 		DB: db,
 	}
-	rpcHdl := &controller.RpcHdl{
-		UserService: userServiceClient,
-	}
-	socketService := &service.SocketService{
-		DB: db,
-	}
-	socketHdl := &controller.SocketHdl{
-		Service: socketService,
-		Project: projectService,
-	}
 	emailConfig := config.DefaultEmailConfig(configConfig)
 	toolHdl := &controller.ToolHdl{
 		DB:    db,
@@ -64,6 +54,22 @@ func InitWeb() (*web.WebApp, error) {
 	managerPathHdl := &controller.ManagerPathHdl{
 		Service: managerPathService,
 	}
+	clientService := &service.ClientService{
+		DB: db,
+	}
+	clientHdl := &controller.ClientHdl{
+		Service: clientService,
+	}
+	rpcHdl := &controller.RpcHdl{
+		UserService: userServiceClient,
+	}
+	socketService := &service.SocketService{
+		DB: db,
+	}
+	socketHdl := &controller.SocketHdl{
+		Service: socketService,
+		Project: projectService,
+	}
 	fakeHdl := &controller.FakeHdl{}
 	webApp := &web.WebApp{
 		Config:      configConfig,
@@ -73,11 +79,12 @@ func InitWeb() (*web.WebApp, error) {
 		Manager:     managerHdl,
 		Project:     projectHdl,
 		Resource:    resourceHdl,
-		RPC:         rpcHdl,
-		Socket:      socketHdl,
 		Tool:        toolHdl,
 		Track:       trackHdl,
 		ManagerPath: managerPathHdl,
+		Client:      clientHdl,
+		RPC:         rpcHdl,
+		Socket:      socketHdl,
 		Fake:        fakeHdl,
 	}
 	return webApp, nil
@@ -85,19 +92,19 @@ func InitWeb() (*web.WebApp, error) {
 
 func InitGrpc() (*grpc.RpcApp, error) {
 	configConfig := config.DefaultConfig()
-	db := config.NewDatabase_Grpc(configConfig)
-	grpcConfig := config.DefaultGrpcConfig(configConfig)
+	db := config.NewDatabaseRpc(configConfig)
+	rpcConfig := config.DefaultRpcConfig(configConfig)
 	rpcApp := &grpc.RpcApp{
 		DB:          db,
-		UserService: grpcConfig,
+		UserService: rpcConfig,
 	}
 	return rpcApp, nil
 }
 
 func InitSupport() (*support.SupportApp, error) {
 	configConfig := config.DefaultConfig()
-	userServiceClient := config.Grpc_DefaultUserService(configConfig)
-	db := config.NewDatabase_Web(configConfig)
+	userServiceClient := config.DefaultUserServiceRpc(configConfig)
+	db := config.NewDatabaseWeb(configConfig)
 	supportApp := &support.SupportApp{
 		Config:      configConfig,
 		UserService: userServiceClient,
@@ -108,6 +115,6 @@ func InitSupport() (*support.SupportApp, error) {
 
 // wire.go:
 
-var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultGrpcConfig, config.Grpc_DefaultUserService, config.DefaultMemory)
+var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultRpcConfig, config.DefaultUserServiceRpc, config.DefaultMemory)
 
-var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(controller.ManagerPathHdl), "*"), wire.Struct(new(controller.FakeHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"), wire.Struct(new(service.ProjectService), "*"), wire.Struct(new(service.ManagerPathService), "*"))
+var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(controller.ManagerPathHdl), "*"), wire.Struct(new(controller.FakeHdl), "*"), wire.Struct(new(controller.ClientHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"), wire.Struct(new(service.ProjectService), "*"), wire.Struct(new(service.ManagerPathService), "*"), wire.Struct(new(service.ClientService), "*"))

@@ -15,8 +15,8 @@ type RpcHdl struct {
 	UserService inf.UserServiceClient
 }
 
-// http://localhost:9090/base/grpc/user/2
-func (p *RpcHdl) GetGrpcUser(c *gin.Context) {
+// http://localhost:9090/client/grpc/user/2
+func (p *RpcHdl) GetUser(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Param("user_id"))
 	if err != nil {
 		c.String(http.StatusBadRequest, "参数错误")

@@ -137,3 +137,13 @@ func (p *SocketService) InitPort() {
 	}
 	logrus.Println("socket init success")
 }
+
+type ClientMessage struct {
+	Token   string         `json:"token"`
+	Project *model.Project `json:"project"`
+	*model.Track
+}
+
+func (p *SocketService) DealMessage(s string) {
+
+}

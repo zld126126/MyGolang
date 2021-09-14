@@ -19,16 +19,19 @@ type WebApp struct {
 	Config      *config.Config
 	UserService inf.UserServiceClient
 
-	Base        *controller.BaseHdl
-	Captcha     *controller.CaptchaHdl
+	Base    *controller.BaseHdl
+	Captcha *controller.CaptchaHdl
+
 	Manager     *controller.ManagerHdl
 	Project     *controller.ProjectHdl
 	Resource    *controller.ResourceHdl
-	RPC         *controller.RpcHdl
-	Socket      *controller.SocketHdl
 	Tool        *controller.ToolHdl
 	Track       *controller.TrackHdl
 	ManagerPath *controller.ManagerPathHdl
+
+	Client *controller.ClientHdl
+	RPC    *controller.RpcHdl
+	Socket *controller.SocketHdl
 
 	Fake *controller.FakeHdl
 }
@@ -60,7 +63,6 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 	baseGroup := routerGroup.Group("/base")
 	{
 		baseGroup.GET("/version", p.Base.GetVersion())
-		baseGroup.GET("/grpc/user/:user_id", p.RPC.GetGrpcUser)
 
 		captcha := baseGroup.Group("/captcha")
 		{
@@ -122,6 +124,16 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 		socket := clientGroup.Group("/socket")
 		{
 			socket.POST("", p.Socket.Create)
+		}
+
+		http := clientGroup.Group("/http")
+		{
+			http.POST("", p.Track.Collect)
+		}
+
+		rpc := clientGroup.Group("/rpc")
+		{
+			rpc.GET("/user/:user_id", p.RPC.GetUser)
 		}
 	}
 

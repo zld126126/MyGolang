@@ -14,7 +14,7 @@ import (
 // 通过一个结构体，实现proto中定义的所有服务
 type RpcApp struct {
 	DB          *database.DB
-	UserService *config.GrpcConfig
+	UserService *config.RpcConfig
 }
 
 func (p *RpcApp) Start() {

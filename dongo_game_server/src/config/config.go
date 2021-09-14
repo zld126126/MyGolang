@@ -26,8 +26,8 @@ func DefaultConfig() *Config {
 	return config
 }
 
-func Grpc_DefaultUserService(config *Config) inf.UserServiceClient {
-	conn, err := grpc.Dial(config.Grpc.UserServiceAddr, grpc.WithInsecure())
+func DefaultUserServiceRpc(config *Config) inf.UserServiceClient {
+	conn, err := grpc.Dial(config.Rpc.UserServiceAddr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -80,12 +80,12 @@ func buildConfig(str string) (*Config, error) {
 }
 
 type Config struct {
-	Base         *Base              `json:"base"`
-	DatabaseWeb  *database.Database `json:"databaseWeb"`
-	DatabaseGrpc *database.Database `json:"databaseGrpc"`
-	Grpc         *GrpcConfig        `json:"grpc"`
-	Web          *WebConfig         `json:"web"`
-	Email        *EmailConfig       `json:"email"`
+	Base        *Base              `json:"base"`
+	DatabaseWeb *database.Database `json:"databaseWeb"`
+	DatabaseRpc *database.Database `json:"databaseGrpc"`
+	Rpc         *RpcConfig         `json:"grpc"`
+	Web         *WebConfig         `json:"web"`
+	Email       *EmailConfig       `json:"email"`
 }
 
 type EmailConfig struct {
@@ -95,7 +95,7 @@ type EmailConfig struct {
 	Password string `json:"password"`
 }
 
-func NewDatabase_Web(config *Config) *database.DB {
+func NewDatabaseWeb(config *Config) *database.DB {
 	db := &database.DB{
 		Gorm: database.NewGormDB_Mysql(config.DatabaseWeb),
 	}
@@ -104,9 +104,9 @@ func NewDatabase_Web(config *Config) *database.DB {
 	return db
 }
 
-func NewDatabase_Grpc(config *Config) *database.DB {
+func NewDatabaseRpc(config *Config) *database.DB {
 	db := &database.DB{
-		Gorm: database.NewGormDB_Mysql(config.DatabaseGrpc),
+		Gorm: database.NewGormDB_Mysql(config.DatabaseRpc),
 	}
 	err := db.InitModel_Grpc()
 	dongo_utils.Chk(err)
@@ -122,8 +122,8 @@ func DefaultMemory(config *Config) *dongo_utils.Memory {
 	return Memory
 }
 
-func DefaultGrpcConfig(config *Config) *GrpcConfig {
-	return config.Grpc
+func DefaultRpcConfig(config *Config) *RpcConfig {
+	return config.Rpc
 }
 
 func DefaultEmailConfig(config *Config) *EmailConfig {
@@ -137,7 +137,7 @@ type Base struct {
 	ProjectName string `json:"projectName"`
 }
 
-type GrpcConfig struct {
+type RpcConfig struct {
 	UserServiceAddr string `json:"userServiceAddr"`
 }
 

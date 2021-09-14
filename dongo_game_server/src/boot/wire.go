@@ -16,8 +16,8 @@ import (
 var configSet = wire.NewSet(
 	config.DefaultConfig,
 	config.DefaultEmailConfig,
-	config.DefaultGrpcConfig,
-	config.Grpc_DefaultUserService,
+	config.DefaultRpcConfig,
+	config.DefaultUserServiceRpc,
 	config.DefaultMemory,
 )
 
@@ -33,11 +33,13 @@ var webSet = wire.NewSet(
 	wire.Struct(new(controller.TrackHdl), "*"),
 	wire.Struct(new(controller.ManagerPathHdl), "*"),
 	wire.Struct(new(controller.FakeHdl), "*"),
+	wire.Struct(new(controller.ClientHdl), "*"),
 
 	wire.Struct(new(service.ManagerService), "*"),
 	wire.Struct(new(service.SocketService), "*"),
 	wire.Struct(new(service.ProjectService), "*"),
 	wire.Struct(new(service.ManagerPathService), "*"),
+	wire.Struct(new(service.ClientService), "*"),
 )
 
 func InitWeb() (*web.WebApp, error) {
@@ -45,7 +47,7 @@ func InitWeb() (*web.WebApp, error) {
 		wire.Struct(new(web.WebApp), "*"),
 		configSet,
 		webSet,
-		config.NewDatabase_Web,
+		config.NewDatabaseWeb,
 	))
 }
 
@@ -53,7 +55,7 @@ func InitGrpc() (*grpc.RpcApp, error) {
 	panic(wire.Build(
 		wire.Struct(new(grpc.RpcApp), "*"),
 		configSet,
-		config.NewDatabase_Grpc,
+		config.NewDatabaseRpc,
 	))
 }
 
@@ -61,6 +63,6 @@ func InitSupport() (*support.SupportApp, error) {
 	panic(wire.Build(
 		wire.Struct(new(support.SupportApp), "*"),
 		configSet,
-		config.NewDatabase_Web,
+		config.NewDatabaseWeb,
 	))
 }
