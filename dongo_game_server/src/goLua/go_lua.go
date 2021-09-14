@@ -2,7 +2,7 @@ package goLua
 
 import (
 	"errors"
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -89,7 +89,8 @@ const LuaPath = "/src/goLua/lua/"
 func (p *_LuaObject) getCurrentDirectory() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
-		log.Fatal(err)
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`lua getCurrentDirectory error`)
+		dongo_utils.Chk(err)
 	}
 	return strings.Replace(dir, "\\", "/", -1)
 }
@@ -102,7 +103,8 @@ func (p *_LuaObject) GetLuaDirectory() string {
 func (p *_LuaObject) DoString(s string) {
 	err := Lua.DoString(s)
 	if err != nil {
-		logrus.WithError(err).Println("lua do string error")
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln("lua DoString error")
+		dongo_utils.Chk(err)
 	}
 }
 
@@ -110,7 +112,8 @@ func (p *_LuaObject) DoFile(fileName string) {
 	path := p.GetLuaDirectory() + fileName
 	err := Lua.DoFile(path)
 	if err != nil {
-		logrus.WithError(err).Println("lua do file error")
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln("lua DoFile error")
+		dongo_utils.Chk(err)
 	}
 }
 
@@ -151,7 +154,7 @@ func (p *_LuaObject) DoFileWithRes(fileName string, funcName string) *LuaBaseRes
 		Protect: true,                    // 如果出现异常，是panic还是返回err
 	}, lua.LNumber(10)) // 传递输入参数n=10
 	if err != nil {
-		logrus.WithError(err).Println("DoFileWithRes error")
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln("lua DoFile error")
 		return nil
 	}
 
@@ -181,7 +184,7 @@ func (p *_LuaObject) DoFileWithRes(fileName string, funcName string) *LuaBaseRes
 			StringValue: string(res),
 		}
 	default:
-		logrus.WithError(errors.New("convert lua unknown"))
+		logrus.WithField("err", fmt.Sprintf("%+v", errors.New("convert lua unknown"))).Errorln("lua DoFileWithRes unknown error")
 		resp = LuaBaseResponse{
 			Tp:    LuaBaseTpUnknow,
 			Value: val,

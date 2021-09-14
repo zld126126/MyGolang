@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,8 @@ import (
 func DefaultConfig() *Config {
 	config, err := GetConfig()
 	if err != nil {
-		log.Fatal(err)
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`DefaultConfig err`)
+		dongo_utils.Chk(err)
 	}
 	return config
 }
@@ -29,21 +30,23 @@ func DefaultConfig() *Config {
 func DefaultUserServiceRpc(config *Config) inf.UserServiceClient {
 	conn, err := grpc.Dial(config.Rpc.UserServiceAddr, grpc.WithInsecure())
 	if err != nil {
-		log.Fatalln(err)
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`DefaultUserServiceRpc err`)
+		dongo_utils.Chk(err)
 	}
 	return inf.NewUserServiceClient(conn)
 }
 
 func init() {
 	configAddress := global_const.ConfigFileAddressDebug
-
 	if gin.Mode() == gin.ReleaseMode {
 		configAddress = global_const.ConfigFileAddressRelease
 	}
+
 	viper.SetDefault(global_const.ConfigFileKey, configAddress)
 
 	err := configInit()
 	if err != nil {
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`init err`)
 		dongo_utils.Chk(err)
 	}
 }
@@ -56,7 +59,7 @@ func configInit() error {
 	}
 	configStr, err := dongo_utils.ToJsonString(conf)
 	if err != nil {
-		logrus.WithError(err).Println("config init error")
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln("configInit error")
 		return err
 	}
 	viper.SetDefault(global_const.ConfigKey, configStr)
@@ -82,8 +85,8 @@ func buildConfig(str string) (*Config, error) {
 type Config struct {
 	Base        *Base              `json:"base"`
 	DatabaseWeb *database.Database `json:"databaseWeb"`
-	DatabaseRpc *database.Database `json:"databaseGrpc"`
-	Rpc         *RpcConfig         `json:"grpc"`
+	DatabaseRpc *database.Database `json:"databaseRpc"`
+	Rpc         *RpcConfig         `json:"rpc"`
 	Web         *WebConfig         `json:"web"`
 	Email       *EmailConfig       `json:"email"`
 }
@@ -97,18 +100,18 @@ type EmailConfig struct {
 
 func NewDatabaseWeb(config *Config) *database.DB {
 	db := &database.DB{
-		Gorm: database.NewGormDB_Mysql(config.DatabaseWeb),
+		Gorm: database.NewMysqlGormDB(config.DatabaseWeb),
 	}
-	err := db.InitModel_Web()
+	err := db.InitWebModel()
 	dongo_utils.Chk(err)
 	return db
 }
 
 func NewDatabaseRpc(config *Config) *database.DB {
 	db := &database.DB{
-		Gorm: database.NewGormDB_Mysql(config.DatabaseRpc),
+		Gorm: database.NewMysqlGormDB(config.DatabaseRpc),
 	}
-	err := db.InitModel_Grpc()
+	err := db.InitRpcModel()
 	dongo_utils.Chk(err)
 	return db
 }

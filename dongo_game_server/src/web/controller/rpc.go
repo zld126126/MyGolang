@@ -2,12 +2,14 @@ package controller
 
 import (
 	"dongo_game_server/service/inf"
-	"log"
+	"fmt"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 	"net/http"
 	"strconv"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/gin-gonic/gin"
-	"github.com/zld126126/dongo_utils/dongo_utils"
 	"golang.org/x/net/context"
 )
 
@@ -15,7 +17,7 @@ type RpcHdl struct {
 	UserService inf.UserServiceClient
 }
 
-// http://localhost:9090/client/grpc/user/2
+// http://localhost:9090/client/rpc/user/2
 func (p *RpcHdl) GetUser(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Param("user_id"))
 	if err != nil {
@@ -25,7 +27,7 @@ func (p *RpcHdl) GetUser(c *gin.Context) {
 	}
 	userResp, err := p.UserService.GetUser(context.Background(), &inf.UserReq{Id: int32(userId)})
 	if err != nil {
-		log.Fatalln(err)
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`RpcHdl GetUser err`)
 		dongo_utils.Chk(err)
 	}
 

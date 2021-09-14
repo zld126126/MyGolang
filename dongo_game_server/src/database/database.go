@@ -31,8 +31,8 @@ type Database struct {
 	Port     int    `json:"port"`
 }
 
-func NewGormDB_Mysql(db *Database) *gorm.DB {
-	instance, err := gorm.Open("mysql", connStr_Mysql(db))
+func NewMysqlGormDB(db *Database) *gorm.DB {
+	instance, err := gorm.Open("mysql", connMysql(db))
 	if err != nil {
 		logrus.WithField("err", fmt.Sprintf("%+v", err)).Println(db.Database + "connect error")
 		dongo_utils.Chk(err)
@@ -44,14 +44,14 @@ func NewGormDB_Mysql(db *Database) *gorm.DB {
 	return instance
 }
 
-func connStr_Mysql(db *Database) string {
+func connMysql(db *Database) string {
 	connStr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8",
 		db.User, db.Password, db.Addr, db.Port, db.Database)
 	return connStr
 }
 
-func NewGormDB_Postgres(db *Database) *gorm.DB {
-	instance, err := gorm.Open("postgres", connStr_Postgres(db))
+func NewPostgresGormDB(db *Database) *gorm.DB {
+	instance, err := gorm.Open("postgres", connPostgres(db))
 	if err != nil {
 		logrus.WithField("err", fmt.Sprintf("%+v", err)).Println(db.Database + "connect error")
 		dongo_utils.Chk(err)
@@ -63,41 +63,42 @@ func NewGormDB_Postgres(db *Database) *gorm.DB {
 	return instance
 }
 
-func connStr_Postgres(db *Database) string {
+func connPostgres(db *Database) string {
 	connStr := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s port=%d",
 		db.Addr, db.User, db.Database, db.Password, db.Port)
 	return connStr
 }
 
-func (p *DB) InitModel_Web() error {
-	logrus.Println(`initModel_Web start`)
+func (p *DB) InitWebModel() error {
+	logrus.Println(`InitWebModel start`)
 	models := []interface{}{
 		model.Manager{},
 		model.Project{},
 		model.Track{},
+		model.TrackItem{},
 		model.Consumer{},
 		model.SocketConfig{},
 	}
 	err := p.Gorm.Debug().AutoMigrate(models...).Error
 	if err != nil {
-		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`initModel_Web err`)
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`InitWebModel err`)
 		return errors.WithStack(err)
 	}
-	logrus.Println(`initModel_Web end`)
+	logrus.Println(`InitWebModel end`)
 	return nil
 }
 
-func (p *DB) InitModel_Grpc() error {
-	logrus.Println(`initModel_Grpc start`)
+func (p *DB) InitRpcModel() error {
+	logrus.Println(`InitRpcModel start`)
 	models := []interface{}{
 		model.User{},
 	}
 	err := p.Gorm.Debug().AutoMigrate(models...).Error
 	if err != nil {
-		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`initModel_Grpc err`)
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`InitRpcModel error`)
 		return errors.WithStack(err)
 	}
-	logrus.Println(`initModel_Grpc end`)
+	logrus.Println(`InitRpcModel end`)
 	return nil
 }
 

@@ -90,13 +90,13 @@ func InitWeb() (*web.WebApp, error) {
 	return webApp, nil
 }
 
-func InitGrpc() (*grpc.RpcApp, error) {
+func InitRpc() (*grpc.RpcApp, error) {
 	configConfig := config.DefaultConfig()
 	db := config.NewDatabaseRpc(configConfig)
 	rpcConfig := config.DefaultRpcConfig(configConfig)
 	rpcApp := &grpc.RpcApp{
-		DB:          db,
-		UserService: rpcConfig,
+		DB:     db,
+		Config: rpcConfig,
 	}
 	return rpcApp, nil
 }

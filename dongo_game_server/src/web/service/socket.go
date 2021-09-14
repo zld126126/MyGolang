@@ -4,6 +4,7 @@ import (
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/global_const"
 	"dongo_game_server/src/model"
+	"fmt"
 
 	"github.com/sirupsen/logrus"
 	"github.com/zld126126/dongo_utils/dongo_utils"
@@ -112,7 +113,7 @@ func (p *SocketService) InitPort() {
 	for i := global_const.SocketPortMin; i < global_const.SocketPortMax; i++ {
 		c, err := p.GetByPort(i)
 		if err != nil {
-			logrus.WithField("port", i).WithError(err).Println("get socket config error")
+			logrus.WithField("err", fmt.Sprintf("%+v", err)).WithField("port", i).Errorln("get socket config error")
 			continue
 		}
 
@@ -122,7 +123,7 @@ func (p *SocketService) InitPort() {
 			c.ProjectId = 0
 			err = p.Save(c)
 			if err != nil {
-				logrus.WithField("port", i).WithError(err).Println("create socket config error")
+				logrus.WithField("err", fmt.Sprintf("%+v", err)).WithField("port", i).Errorln("create socket config error")
 				continue
 			}
 			continue
@@ -131,7 +132,7 @@ func (p *SocketService) InitPort() {
 		c = p.NewSocketConfig(i)
 		err = p.Add(c)
 		if err != nil {
-			logrus.WithField("port", i).WithError(err).Println("create socket config error")
+			logrus.WithField("err", fmt.Sprintf("%+v", err)).WithField("port", i).Errorln("create socket config error")
 			continue
 		}
 	}

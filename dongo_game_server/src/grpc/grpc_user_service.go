@@ -12,11 +12,11 @@ import (
 	"golang.org/x/net/context"
 )
 
-type Grpc_UserService struct {
+type RpcUserService struct {
 	DB *database.DB
 }
 
-func (p *Grpc_UserService) GetUser(c context.Context, req *inf.UserReq) (*inf.UserResp, error) {
+func (p *RpcUserService) GetUser(c context.Context, req *inf.UserReq) (*inf.UserResp, error) {
 	var user model.User
 	err := p.DB.Gorm.Table(`users u`).Where(`u.id = ?`, req.Id).Scan(&user).Error
 	if err != nil {
@@ -25,6 +25,6 @@ func (p *Grpc_UserService) GetUser(c context.Context, req *inf.UserReq) (*inf.Us
 	return &inf.UserResp{Name: user.Name, Time: dongo_utils.Tick64()}, nil
 }
 
-func (p *Grpc_UserService) PushUser(context.Context, *inf.UserReq) (*empty.Empty, error) {
+func (p *RpcUserService) PushUser(context.Context, *inf.UserReq) (*empty.Empty, error) {
 	return nil, nil
 }

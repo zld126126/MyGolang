@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"dongo_game_server/src/web/service"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"net"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type SocketHdl struct {
@@ -33,7 +34,7 @@ func (p *SocketHdl) HandleSocket(conn net.Conn) {
 			break
 		}
 		if err != nil {
-			logrus.Println(err)
+			logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`default config get err`)
 			continue
 		}
 		logrus.Printf("Receive data [%s] from [%s]", string(data[:n]), conn.RemoteAddr())

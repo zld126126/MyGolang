@@ -10,9 +10,9 @@ import (
 	_ "dongo_game_server/src/web/docs"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/zld126126/dongo_utils/dongo_utils"
 )
 
 type WebApp struct {
@@ -51,8 +51,8 @@ func (p *WebApp) Start() {
 
 	err := router.Run(fmt.Sprintf(`:%s`, p.Config.Web.Addr))
 	if err != nil {
-		log.Fatalln(err)
-		dongo_utils.Chk(err)
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`WebApp Start error`)
+		log.Fatal(err)
 	}
 
 	log.Println("web serve running")

@@ -116,7 +116,7 @@ func (p *ToolHdl) SendEmail(c *gin.Context) {
 	var email dongo_utils.EmailConfig
 	err := copier.Copy(&email, p.Email)
 	if err != nil {
-		logrus.WithError(err).Println("send email err")
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`SendEmail err`)
 		c.String(http.StatusBadRequest, "send email err")
 		return
 	}
@@ -131,7 +131,7 @@ func (p *ToolHdl) SendEmail(c *gin.Context) {
 
 	err = dongo_utils.SendEmail(&msg, &email)
 	if err != nil {
-		logrus.WithError(err).Println("send email err")
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`SendEmail err`)
 		c.String(http.StatusBadRequest, "send email err")
 		return
 	}

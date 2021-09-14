@@ -4,10 +4,12 @@ import (
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/global_const"
 	"fmt"
-	"log"
 	"net/http"
 	"text/template"
 	"time"
+
+	"github.com/sirupsen/logrus"
+	"github.com/zld126126/dongo_utils/dongo_utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -30,10 +32,11 @@ func (p *BaseHdl) GetVersion() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Status(http.StatusOK)
 
-		templateText := fmt.Sprintf("%v : %v", "GameServer_"+version, time.Now().Local())
+		templateText := fmt.Sprintf("%v : %v", gin.Mode()+"_GameServer_"+version, time.Now().Local())
 		tmpl, err := template.New("version").Parse(templateText)
 		if err != nil {
-			log.Fatalf("parsing: %s", err)
+			logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`template err`)
+			dongo_utils.Chk(err)
 		}
 		tmpl.Execute(c.Writer, nil)
 	}

@@ -3,17 +3,18 @@ package main
 import (
 	"dongo_game_server/src/boot"
 	"dongo_game_server/src/goLua"
+	"fmt"
 	"log"
 
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/sirupsen/logrus"
 )
 
 func Application() {
 	// GoRpc init
-	rpcApp, err := boot.InitGrpc()
+	rpcApp, err := boot.InitRpc()
 	if err != nil {
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`rpcApp init error`)
 		log.Fatal(err)
-		dongo_utils.Chk(err)
 	}
 
 	// GoRpc start
@@ -22,8 +23,8 @@ func Application() {
 	// support init
 	supportApp, err := boot.InitSupport()
 	if err != nil {
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`supportApp init error`)
 		log.Fatal(err)
-		dongo_utils.Chk(err)
 	}
 
 	// support init
@@ -32,8 +33,8 @@ func Application() {
 	// web init
 	webApp, err := boot.InitWeb()
 	if err != nil {
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`webApp init error`)
 		log.Fatal(err)
-		dongo_utils.Chk(err)
 	}
 
 	// web start

@@ -14,7 +14,7 @@ poolSize = 20 #db default 20
 slow = 50 #单位：ms
 port = 3306
 
-[databaseGrpc]
+[databaseRpc]
 user = "root"
 password = "123456"
 addr = "localhost"
@@ -23,7 +23,7 @@ poolSize = 20 #db default 20
 slow = 50 #单位：ms
 port = 3306
 
-[grpc]
+[rpc]
 userServiceAddr = "127.0.0.1:10086"
 
 [web]
