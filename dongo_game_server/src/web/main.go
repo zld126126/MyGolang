@@ -4,10 +4,9 @@ import (
 	"dongo_game_server/service/inf"
 	"dongo_game_server/src/config"
 	"dongo_game_server/src/web/controller"
+	_ "dongo_game_server/src/web/docs"
 	"fmt"
 	"log"
-
-	_ "dongo_game_server/src/web/docs"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -42,6 +41,7 @@ func (p *WebApp) Start() {
 	router := gin.New()
 
 	router.Use(ServeRecover)
+	router.Use(Cors)
 	//router.Use(gin.Recovery())
 	// router.LoadHTMLGlob("./resources")
 
