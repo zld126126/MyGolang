@@ -19,6 +19,7 @@ var configSet = wire.NewSet(
 	config.DefaultRpcConfig,
 	config.DefaultUserServiceRpc,
 	config.DefaultMemory,
+	config.DefaultRedis,
 )
 
 var webSet = wire.NewSet(

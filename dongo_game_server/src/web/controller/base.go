@@ -3,7 +3,6 @@ package controller
 import (
 	"dongo_game_server/src/global_const"
 	"fmt"
-	"net/http"
 	"text/template"
 	"time"
 
@@ -27,8 +26,6 @@ type BaseHdl struct{}
 func (p *BaseHdl) GetVersion() gin.HandlerFunc {
 	version := viper.GetViper().GetString(global_const.ConfigVersionKey)
 	return func(c *gin.Context) {
-		c.Status(http.StatusOK)
-
 		templateText := fmt.Sprintf("%v : %v", gin.Mode()+"_GameServer_"+version, time.Now().Local())
 		tmpl, err := template.New("version").Parse(templateText)
 		if err != nil {

@@ -51,6 +51,7 @@ func InitWeb() (*web.WebApp, error) {
 	}
 	managerPathHdl := &controller.ManagerPathHdl{
 		Service: managerPathService,
+		Manager: managerService,
 	}
 	clientService := &service.ClientService{
 		DB: db,
@@ -69,6 +70,7 @@ func InitWeb() (*web.WebApp, error) {
 		Project: projectService,
 	}
 	fakeHdl := &controller.FakeHdl{}
+	conn := config.DefaultRedis(configConfig)
 	webApp := &web.WebApp{
 		Config:      configConfig,
 		UserService: userServiceClient,
@@ -84,6 +86,7 @@ func InitWeb() (*web.WebApp, error) {
 		RPC:         rpcHdl,
 		Socket:      socketHdl,
 		Fake:        fakeHdl,
+		Redis:       conn,
 	}
 	return webApp, nil
 }
@@ -113,6 +116,6 @@ func InitSupport() (*support.SupportApp, error) {
 
 // wire.go:
 
-var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultRpcConfig, config.DefaultUserServiceRpc, config.DefaultMemory)
+var configSet = wire.NewSet(config.DefaultConfig, config.DefaultEmailConfig, config.DefaultRpcConfig, config.DefaultUserServiceRpc, config.DefaultMemory, config.DefaultRedis)
 
 var webSet = wire.NewSet(wire.Struct(new(controller.BaseHdl), "*"), wire.Struct(new(controller.CaptchaHdl), "*"), wire.Struct(new(controller.ManagerHdl), "*"), wire.Struct(new(controller.ProjectHdl), "*"), wire.Struct(new(controller.ResourceHdl), "*"), wire.Struct(new(controller.RpcHdl), "*"), wire.Struct(new(controller.SocketHdl), "*"), wire.Struct(new(controller.ToolHdl), "*"), wire.Struct(new(controller.TrackHdl), "*"), wire.Struct(new(controller.ManagerPathHdl), "*"), wire.Struct(new(controller.FakeHdl), "*"), wire.Struct(new(controller.ClientHdl), "*"), wire.Struct(new(service.ManagerService), "*"), wire.Struct(new(service.SocketService), "*"), wire.Struct(new(service.ProjectService), "*"), wire.Struct(new(service.ManagerPathService), "*"), wire.Struct(new(service.ClientService), "*"))

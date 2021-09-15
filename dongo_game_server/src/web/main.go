@@ -6,6 +6,7 @@ import (
 	"dongo_game_server/src/web/controller"
 	_ "dongo_game_server/src/web/docs"
 	"fmt"
+	"github.com/garyburd/redigo/redis"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -32,7 +33,8 @@ type WebApp struct {
 	RPC    *controller.RpcHdl
 	Socket *controller.SocketHdl
 
-	Fake *controller.FakeHdl
+	Fake  *controller.FakeHdl
+	Redis redis.Conn
 }
 
 func (p *WebApp) Start() {
@@ -77,17 +79,7 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 			manager.POST("/logout ", p.Manager.Logout)
 		}
 
-		managerPath := baseGroup.Group("/manager_path")
-		{
-			managerPath.POST("/create", p.ManagerPath.Create)
-			path := managerPath.Group("/:id", p.ManagerPath.Mid)
-			{
-				path.GET("", p.ManagerPath.Create)
-				path.POST("/update", p.ManagerPath.Update)
-				path.POST("/del", p.ManagerPath.Del)
-			}
-			managerPath.GET("/full_list", p.ManagerPath.FullList)
-		}
+		baseGroup.GET("/pathList", p.ManagerPath.PathList)
 	}
 
 	// web后台对接api
@@ -122,6 +114,17 @@ func (p *WebApp) Mount(routerGroup *gin.RouterGroup) {
 				m.POST("/del", p.Project.Del)
 				m.POST("/refreshToken", p.Project.RefreshToken)
 			}
+		}
+
+		managerPath := webGroup.Group("/manager_path")
+		{
+			managerPath.POST("/create", p.ManagerPath.Create)
+			path := managerPath.Group("/:id", p.ManagerPath.Mid)
+			{
+				path.GET("", p.ManagerPath.Create)
+				path.POST("/update", p.ManagerPath.Update)
+			}
+			managerPath.GET("/List", p.ManagerPath.List)
 		}
 
 		webGroup.GET("/email", p.Tool.SendEmail)

@@ -29,6 +29,9 @@ userServiceAddr = "127.0.0.1:10086"
 [web]
 addr = "9090"
 
+[redis]
+port = "6379"
+
 [email]
 host = "smtp.sina.com"
 port = 465

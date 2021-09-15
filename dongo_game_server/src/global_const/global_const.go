@@ -1,5 +1,9 @@
 package global_const
 
+import (
+	"github.com/ahmetb/go-linq/v3"
+)
+
 const (
 	ConfigFileAddressRelease = `../resources/config.toml` // go build正式环境用
 	ConfigFileAddressDebug   = `resources/config.toml`    // goland本地启动用
@@ -16,6 +20,8 @@ const (
 	ManagerWebHeaderKey    = `ManagerWebHeaderKey`    // web登陆 自定义HeaderKey
 	ManagerClientHeaderKey = `ManagerClientHeaderKey` // client登陆 自定义HeaderKey
 
+	ManagerPathKey = `ManagerPathKey_%d` // 用户session key
+
 	ProjectTokenSalt = `ProjectTokenSalt` // 项目token Salt
 	ProjectKey       = `ProjectKey_%d`    // 用户session key
 
@@ -27,3 +33,11 @@ const (
 )
 
 var Paths = []string{"/manager", "/manager_path"}
+
+func IsNormalPath(p string) bool {
+	item := linq.From(Paths).WhereT(func(i string) bool {
+		return i == p
+	}).First().(string)
+
+	return item != ""
+}

@@ -5,6 +5,7 @@ import (
 	"dongo_game_server/src/model"
 	"errors"
 	"fmt"
+	"github.com/ahmetb/go-linq/v3"
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
 	"github.com/zld126126/dongo_utils/dongo_utils"
@@ -169,12 +170,10 @@ func (p *ClientService) NewTrack(projectId int64, consumerId int64, consumerItem
 
 func (p *ClientService) SaveTrack(project *model.Project, consumer *model.Consumer, tp model.SourceType, messages []string) (*model.Track, error) {
 	getCurrentConsumerItem := func() *model.ConsumerItem {
-		for _, item := range consumer.Items {
-			if item.Tp == tp {
-				return item
-			}
-		}
-		return nil
+		item := linq.From(consumer.Items).WhereT(func(i *model.ConsumerItem) bool {
+			return i.Tp == tp
+		}).First().(*model.ConsumerItem)
+		return item
 	}
 
 	item := getCurrentConsumerItem()

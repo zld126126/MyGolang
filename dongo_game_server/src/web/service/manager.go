@@ -219,3 +219,33 @@ func (p *ManagerService) Del(id int64) error {
 	}
 	return nil
 }
+
+func (p *ManagerService) GetPathByToken(token string) ([]string, error) {
+	m, err := p.DecodeToken(token)
+	if err != nil {
+		return []string{}, nil
+	}
+
+	result, err := p.GetPath(m)
+	if err != nil {
+		return []string{}, err
+	}
+	return result, nil
+}
+
+func (p *ManagerService) GetPath(m *model.Manager) ([]string, error) {
+	result := []string{}
+	paths := []*model.ManagerPath{}
+	err := p.DB.Gorm.Table(`manager_paths m`).
+		Where(`exist (select 1 from manager_path_relations mpr where mpr.manager_id = ? and mpr.manager_path_id = m.id)`, m.Id).
+		Select(`m.*`).
+		Scan(&paths).Error
+	if err != nil {
+		return result, err
+	}
+
+	for _, p := range paths {
+		result = append(result, p.OptionPath)
+	}
+	return result, nil
+}

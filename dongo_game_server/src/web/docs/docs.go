@@ -119,7 +119,7 @@ var doc = `{
         },
         "/web/manager/create/": {
             "post": {
-                "description": "创建管理用户",
+                "description": "采集数据",
                 "consumes": [
                     "application/json"
                 ],
@@ -127,28 +127,28 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "管理用户"
+                    "埋点"
                 ],
-                "summary": "创建管理用户",
+                "summary": "采集数据",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户名",
-                        "name": "name",
+                        "description": "openId",
+                        "name": "open_id",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "密码",
-                        "name": "password",
+                        "description": "来源类型 0未知 1微信小程序 2安卓 3IOS 4WEB 5其他",
+                        "name": "source_tp",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
-                        "description": "用户类型",
-                        "name": "tp",
+                        "description": "项目token",
+                        "name": "token",
                         "in": "query",
                         "required": true
                     }

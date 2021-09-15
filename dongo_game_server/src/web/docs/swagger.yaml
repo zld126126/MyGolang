@@ -165,21 +165,21 @@ paths:
     post:
       consumes:
       - application/json
-      description: 创建管理用户
+      description: 采集数据
       parameters:
-      - description: 用户名
+      - description: openId
         in: query
-        name: name
+        name: open_id
         required: true
         type: string
-      - description: 密码
+      - description: 来源类型 0未知 1微信小程序 2安卓 3IOS 4WEB 5其他
         in: query
-        name: password
+        name: source_tp
         required: true
         type: string
-      - description: 用户类型
+      - description: 项目token
         in: query
-        name: tp
+        name: token
         required: true
         type: integer
       produces:
@@ -189,9 +189,9 @@ paths:
           description: ok
           schema:
             type: string
-      summary: 创建管理用户
+      summary: 采集数据
       tags:
-      - 管理用户
+      - 埋点
   /web/manager/list/:
     get:
       consumes:

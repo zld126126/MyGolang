@@ -3,6 +3,8 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/garyburd/redigo/redis"
+	"log"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
@@ -88,6 +90,7 @@ type Config struct {
 	DatabaseRpc *database.Database `json:"databaseRpc"`
 	Rpc         *RpcConfig         `json:"rpc"`
 	Web         *WebConfig         `json:"web"`
+	Redis       *RedisConfig       `json:"redis"`
 	Email       *EmailConfig       `json:"email"`
 }
 
@@ -133,6 +136,15 @@ func DefaultEmailConfig(config *Config) *EmailConfig {
 	return config.Email
 }
 
+func DefaultRedis(config *Config) redis.Conn {
+	c, err := redis.Dial("tcp", fmt.Sprintf("127.0.0.1:%v", config.Redis.Port))
+	if err != nil {
+		logrus.WithField("err", fmt.Sprintf("%+v", err)).Errorln(`Connect to redis error`)
+		log.Fatal(err)
+	}
+	return c
+}
+
 type Base struct {
 	Author      string `json:"author"`
 	Age         int    `json:"age"`
@@ -146,4 +158,8 @@ type RpcConfig struct {
 
 type WebConfig struct {
 	Addr string `json:"addr"`
+}
+
+type RedisConfig struct {
+	Port string `json:"port"`
 }
