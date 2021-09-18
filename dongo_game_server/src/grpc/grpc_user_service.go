@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/pkg/errors"
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 	"golang.org/x/net/context"
 )
 

@@ -27,7 +27,7 @@ require (
 	github.com/swaggo/swag v1.6.7
 	github.com/urfave/cli/v2 v2.3.0 // indirect
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
-	github.com/zld126126/dongo_utils v0.0.0-20210907122902-f403befc2516
+	github.com/zld126126/dongo_utils v0.0.0-20210918093323-beb8aba7c182
 	golang.org/x/net v0.0.0-20210908191846-a5e095526f91
 	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0 // indirect
 	golang.org/x/text v0.3.7 // indirect

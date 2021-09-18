@@ -10,7 +10,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	lua "github.com/yuin/gopher-lua"
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 )
 
 /**

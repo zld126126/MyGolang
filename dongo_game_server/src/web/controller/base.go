@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"

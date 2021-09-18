@@ -3,8 +3,9 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/garyburd/redigo/redis"
 	"log"
+
+	"github.com/garyburd/redigo/redis"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ import (
 	"dongo_game_server/src/database"
 	"dongo_game_server/src/global_const"
 
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 )
 
 func DefaultConfig() *Config {

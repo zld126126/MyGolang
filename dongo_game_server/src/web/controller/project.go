@@ -6,7 +6,7 @@ import (
 	"dongo_game_server/src/web/base"
 	"dongo_game_server/src/web/service"
 	"fmt"
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 	"net/http"
 	"strconv"
 

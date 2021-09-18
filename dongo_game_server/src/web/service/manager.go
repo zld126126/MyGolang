@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 )
 
 type ManagerService struct {

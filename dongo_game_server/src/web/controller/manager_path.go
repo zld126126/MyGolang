@@ -7,7 +7,7 @@ import (
 	"dongo_game_server/src/web/service"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 	"net/http"
 	"strconv"
 )

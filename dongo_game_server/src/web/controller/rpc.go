@@ -3,7 +3,7 @@ package controller
 import (
 	"dongo_game_server/service/inf"
 	"fmt"
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 	"net/http"
 	"strconv"
 

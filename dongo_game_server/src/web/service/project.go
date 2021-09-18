@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 
-	"github.com/zld126126/dongo_utils/dongo_utils"
+	"github.com/zld126126/dongo_utils"
 )
 
 type ProjectService struct {
