@@ -11,3 +11,5 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+/cpp_dll/cpp_dll.opensdf
+/cpp_dll/ipch/cpp_dll-95289155/cpp_dll-5a3c55aa.ipch
