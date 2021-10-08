@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include <stdio.h>
 
 extern "C" __declspec(dllexport) int add(int a, int b)
 {
@@ -13,4 +14,9 @@ extern "C" __declspec(dllexport) int sub(int a, int b)
 	return (a - b);
 }
 
+// ≤‚ ‘golang÷∏’Î¥´ ‰
+extern "C" __declspec(dllexport) void * point(void *ctx){
+	printf("ctx:%p\n", ctx);
+	return ctx;
+}
 

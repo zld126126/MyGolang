@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"syscall"
+	"unsafe"
 )
 
 const dllFileName = "cpp_dll.dll"
@@ -28,13 +29,13 @@ func GoCallDll1(a, b int) uintptr {
 	ret, _, err := add.Call(IntPtr(a), IntPtr(b))
 	if err != nil && IsFinishError(err) {
 		fmt.Println(dllFileName+fmt.Sprintf(":%d+%d", a, b)+"运算结果为:", ret)
-	}else{
-		fmt.Println(fmt.Sprintf("%+v",err))
+	} else {
+		fmt.Println(fmt.Sprintf("%+v", err))
 	}
 	return ret
 }
 
-func GoCallDll2(a, b int) uintptr{
+func GoCallDll2(a, b int) uintptr {
 	dllFile, _ := syscall.LoadLibrary(dllFileName)
 	fmt.Println("+++++++syscall.LoadLibrary:", dllFile, "+++++++")
 	defer syscall.FreeLibrary(dllFile)
@@ -48,22 +49,42 @@ func GoCallDll2(a, b int) uintptr{
 		0)
 	if err != nil && IsFinishError(err) {
 		fmt.Println(dllFileName+fmt.Sprintf(":%d+%d", a, b)+"运算结果为:", ret)
-	}else{
-		fmt.Println(fmt.Sprintf("%+v",err))
+	} else {
+		fmt.Println(fmt.Sprintf("%+v", err))
 	}
 	return ret
 }
 
-func GoCallDll3(a, b int) uintptr{
+func GoCallDll3(a, b int) uintptr {
 	DllTestDef := syscall.MustLoadDLL(dllFileName)
 	add := DllTestDef.MustFindProc("add")
 
 	fmt.Println("+++++++MustFindProc：", add, "+++++++")
 	ret, _, err := add.Call(IntPtr(a), IntPtr(b))
 	if err != nil && IsFinishError(err) {
-		fmt.Println(dllFileName+fmt.Sprintf(":%d+%d", a, b)+"运算结果为:", ret)
-	}else{
-		fmt.Println(fmt.Sprintf("%+v",err))
+		fmt.Println(dllFileName+fmt.Sprintf(":%d+%d", a, b)+"结果为:", ret)
+	} else {
+		fmt.Println(fmt.Sprintf("%+v", err))
+	}
+	return ret
+}
+
+type CPoint struct {
+	Name string
+}
+
+// 指针测试
+func GoCallDllPoint(c *CPoint) uintptr {
+	DllTestDef := syscall.MustLoadDLL(dllFileName)
+	point := DllTestDef.MustFindProc("point")
+
+	fmt.Println("+++++++MustFindProc：", point, "+++++++")
+	ret, _, err := point.Call(uintptr(unsafe.Pointer(c)))
+	if err != nil && IsFinishError(err) {
+		p := (*CPoint)(unsafe.Pointer(ret))
+		fmt.Println(dllFileName+fmt.Sprintf("原始:%p", c)+",运算结果为:", fmt.Sprintf("%p", p))
+	} else {
+		fmt.Println(fmt.Sprintf("%+v", err))
 	}
 	return ret
 }
@@ -71,16 +92,19 @@ func GoCallDll3(a, b int) uintptr{
 type Common interface{}
 
 // 测试golang 调用 dll方法
-func GoCallDllTest(){
+func GoCallDllTest() {
 	// 三种调用方式
 	res1 := GoCallDll1(4, 5)
-	fmt.Println("r1:",(int)(res1))
+	fmt.Println("r1:", (int)(res1))
 
 	res2 := GoCallDll2(3, 6)
-	fmt.Println("r2:",Common(res2))
+	fmt.Println("r2:", Common(res2))
 
 	res3 := GoCallDll3(2, 7)
-	fmt.Println("r3:",(int)(res3))
+	fmt.Println("r3:", (int)(res3))
+
+	// 特殊传输指针: 但是c++ 不做调用(回调使用)
+	GoCallDllPoint(&CPoint{Name: "dong"})
 }
 
 // 等待命令
