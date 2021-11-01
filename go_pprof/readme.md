@@ -1,5 +1,10 @@
-# go pprof
-go pprof
+
+- [如何使用pprof](#如何使用pprof)
+  - [1.引用pprof](#1引用pprof)
+  - [2.启动一个runtime](#2启动一个runtime)
+  - [3.启动main && 执行如下命令:](#3启动main--执行如下命令)
+  - [4.安装graphviz](#4安装graphviz)
+  - [5.查看保存的pprof文件 && 调优:](#5查看保存的pprof文件--调优)
 
 ## 如何使用pprof
 ### 1.引用pprof
