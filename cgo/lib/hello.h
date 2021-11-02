@@ -1,7 +1,2 @@
-// hello.c
-
-#include <stdio.h>
-
-void SayHello(const char* s) {
-	puts(s);
-}
+// hello.h
+void SayHello4(/*const*/ char* s);

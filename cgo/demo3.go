@@ -1,8 +1,8 @@
 package main
 
-//#include"lib/hello.h"
+//#include "lib/hello.c"
 import "C"
 
-func demo3(){
-	C.SayHello(C.CString("Hello, World3\n"))
+func demo3() {
+	C.SayHello3(C.CString("Hello, World3\n"))
 }
