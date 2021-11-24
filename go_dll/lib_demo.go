@@ -121,7 +121,6 @@ func Pause() {
 }
 
 func GoCallDll(a, b int) uintptr {
-	fmt.Println(111111)
 	DllTestDef := syscall.MustLoadDLL(goDLL)
 	add := DllTestDef.MustFindProc("Add")
 
