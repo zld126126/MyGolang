@@ -6,9 +6,7 @@ func main() {
 	fmt.Println("go call cppDLL")
 	GoCallDllTest()
 
-	//生成golang-dll命令
-	//go build -o go.dll -buildmode=c-shared main.go
-	fmt.Println("go call goDLL")
+	fmt.Println("go call go-lib DLL")
 	GoCallDll(3, 5)
 
 	Pause()

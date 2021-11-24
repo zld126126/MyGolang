@@ -7,13 +7,8 @@ import (
 	"unsafe"
 )
 
-//export Add
-func Add(a, b int) int {
-	return a + b
-}
-
 var (
-	goDLL  = "go.dll"
+	goDLL  = "go_lib.dll"
 	cppDLL = "cpp_dll.dll"
 )
 
