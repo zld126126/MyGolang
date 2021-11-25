@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"fmt"
 	"syscall"
@@ -8,7 +7,7 @@ import (
 )
 
 var (
-	goDLL  = "go_lib.dll"
+	goDLL  = "libgo_lib.dll"
 	cppDLL = "cpp_dll.dll"
 )
 
