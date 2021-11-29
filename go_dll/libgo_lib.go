@@ -12,4 +12,4 @@ func Add(a, b int) int {
 //gcc libgo_lib.def libgo_lib.a -shared -lwinmm -lWs2_32 -o libgo_lib.dll -Wl,--out-implib,libgo_lib.lib
 
 //编译时 放开main()
-//func main() {}
+func main() {}

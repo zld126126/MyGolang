@@ -1,19 +1,22 @@
 package main
 
-/*
-#cgo CFLAGS: -I${SRCDIR}
-#cgo LDFLAGS: -L${SRCDIR} -lgo_lib
-#include "libgo_lib.h"
-*/
 import "C"
 import "fmt"
 
-func main() {
-	testDLL()
-	testCgo()
-
-	Pause()
-}
+///*
+//#cgo CFLAGS: -I${SRCDIR}
+//#cgo LDFLAGS: -L${SRCDIR} -lgo_lib
+//#include "libgo_lib.h"
+//*/
+//import "C"
+//import "fmt"
+//
+//func main() {
+//	testDLL()
+//	testCgo()
+//
+//	Pause()
+//}
 
 func testDLL() {
 	//WIN32
@@ -24,7 +27,7 @@ func testDLL() {
 	GoCallDll(3, 5)
 }
 
-func testCgo() {
-	a := C.Add(C.longlong(3), C.longlong(5))
-	fmt.Println(int(a))
-}
+//func testCgo() {
+//	a := C.Add(C.longlong(3), C.longlong(5))
+//	fmt.Println(int(a))
+//}
