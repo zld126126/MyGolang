@@ -1,3 +1,8 @@
+## 安装go-assets-builder
+go get github.com/jessevdk/go-assets-builder
+go install github.com/jessevdk/go-assets-builder@latest
+> 在本目录执行：go-assets-builder templates -o assets.go  
+
 ## 普通 运行步骤
 1.server目录下server.exe
 2.访问localhost:9090/index
