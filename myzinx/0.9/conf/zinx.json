@@ -1,0 +1,6 @@
+{
+  "Name":"demo server by dong",
+  "Host":"127.0.0.1",
+  "TcpPort":7777,
+  "MaxConn":3
+}
