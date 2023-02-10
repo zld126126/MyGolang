@@ -2,14 +2,15 @@ package main
 
 import (
 	"embed"
-	"github.com/gin-gonic/gin"
 	"html/template"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
-//go:embed static/* templates/*
+//go:embed templates/*
 var f embed.FS
 
 func main() {
