@@ -1,6 +1,6 @@
 ## mychatgpt
->how to use github.com/sashabaranov/go-gpt3 for chatgpt
->已更新架构 gin+html+go-gpt3
+Gin+Html+go-gpt3<br>
 
-访问
-localhost:9090/index
+启动demo
+go mod tidy<br>
+浏览器localhost:9090/index<br>
