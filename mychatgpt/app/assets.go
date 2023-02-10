@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"time"
@@ -10,19 +10,19 @@ var _Assets9f0ae851af9adb08e3242917d7d52dc270c7bae2 = "<!DOCTYPE html>\r\n<html 
 
 // Assets returns go-assets FileSystem
 var Assets = assets.NewFileSystem(map[string][]string{"/": []string{"templates"}, "/templates": []string{"index.html"}}, map[string]*assets.File{
-	"/": &assets.File{
+	"/templates/index.html": &assets.File{
+		Path:     "/templates/index.html",
+		FileMode: 0x1b6,
+		Mtime:    time.Unix(1676016907, 1676016907532833400),
+		Data:     []byte(_Assets9f0ae851af9adb08e3242917d7d52dc270c7bae2),
+	}, "/": &assets.File{
 		Path:     "/",
 		FileMode: 0x800001ff,
-		Mtime:    time.Unix(1676016784, 1676016784029666700),
+		Mtime:    time.Unix(1676023929, 1676023929534779900),
 		Data:     nil,
 	}, "/templates": &assets.File{
 		Path:     "/templates",
 		FileMode: 0x800001ff,
 		Mtime:    time.Unix(1676016907, 1676016907533829900),
 		Data:     nil,
-	}, "/templates/index.html": &assets.File{
-		Path:     "/templates/index.html",
-		FileMode: 0x1b6,
-		Mtime:    time.Unix(1676016907, 1676016907532833400),
-		Data:     []byte(_Assets9f0ae851af9adb08e3242917d7d52dc270c7bae2),
 	}}, "")

@@ -1,0 +1,64 @@
+definitions:
+  controller.ChatGPTReq:
+    properties:
+      ask:
+        type: string
+    type: object
+  controller.ChatGPTResp:
+    properties:
+      answer:
+        description: 回答
+        type: string
+      ask:
+        description: 问题
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /chatgpt:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ChatGPT请求参数
+        in: body
+        name: Param
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ChatGPTReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ChatGPTResp'
+      summary: 获取ChatGPT答案
+      tags:
+      - 业务
+  /index:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 主页html
+      tags:
+      - 业务
+  /test:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 测试api接口
+      tags:
+      - 测试
+swagger: "2.0"

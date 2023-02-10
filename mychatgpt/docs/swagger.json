@@ -1,0 +1,102 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/chatgpt": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "业务"
+                ],
+                "summary": "获取ChatGPT答案",
+                "parameters": [
+                    {
+                        "description": "ChatGPT请求参数",
+                        "name": "Param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.ChatGPTReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ChatGPTResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/index": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "业务"
+                ],
+                "summary": "主页html",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/test": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "测试"
+                ],
+                "summary": "测试api接口",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.ChatGPTReq": {
+            "type": "object",
+            "properties": {
+                "ask": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.ChatGPTResp": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "description": "回答",
+                    "type": "string"
+                },
+                "ask": {
+                    "description": "问题",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

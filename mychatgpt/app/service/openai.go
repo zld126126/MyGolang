@@ -1,4 +1,4 @@
-package main
+package service
 
 import (
 	"context"
@@ -8,15 +8,6 @@ import (
 
 type OpenAIService struct {
 	Token string
-}
-
-var _OpenAI = &OpenAIService{
-	Token: "Your Key",
-}
-
-// GetOpenAIService 获取service
-func GetOpenAIService() *OpenAIService {
-	return _OpenAI
 }
 
 // GetToken 获取token
