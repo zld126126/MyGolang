@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script type="text/javascript" src="//cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.staticfile.org/jqueryui/1.10.2/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <h3>
+                    {{.WEBSITE_TITLE}}
+                </h3>
+                <p>
+                    <em>{{.WEBSITE_TITLE}}</em>由<strong>DongTech</strong>集成开发和维护。
+                </p>
+            </div>
+            <div id="up_image">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <br>
+                    <p>问题名称: <input type="text" name="Ask" value="" id="Ask"/></p><br/>
+                    <p>问题答案: <input name="Answer" value="" id="Answer" style="width: 1200px;"></p><br/>
+                    <input type="button" value="提交" style="width: 100px;color:red;margin-top: 30px;margin-left: 30px;" onclick="GetChatGPTResult()">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function GetChatGPTResult(){
+            $("#Answer").val("")
+            var data = {
+                'ask': $("#Ask").val().trim(),
+            };
+
+            if (data.ask == ""){
+                alert("请输入正确的问题~")
+                return
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/chatgpt",
+                data: data,
+                dataType: 'json',
+                async: true,
+                success: function (result) {
+                    console.log(result.Answer)
+                    $("#Answer").val(result.Answer)
+                },
+                error: function (result) {
+                    alert("请求失败,请稍后重试...")
+                },
+            });
+        }
+    </script>
+</body>
+
+</html>
