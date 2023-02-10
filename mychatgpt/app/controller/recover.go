@@ -1,4 +1,4 @@
-package app
+package controller
 
 import (
 	"bytes"
@@ -17,7 +17,7 @@ var (
 	slash     = []byte("/")
 )
 
-func serveRecover(c *gin.Context) {
+func (p *Controller) ServeRecover(c *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
 			stack := stack(3)

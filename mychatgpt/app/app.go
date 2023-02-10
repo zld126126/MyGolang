@@ -21,10 +21,10 @@ type App struct {
 
 func (p *App) Start() {
 	// 服务容灾recover
-	p.Server.Use(serveRecover)
+	p.Server.Use(p.Controller.ServeRecover)
 
 	// asset加载html
-	templates, err := LoadTemplate()
+	templates, err := p.LoadTemplate()
 	if err != nil {
 		panic(err)
 	}
@@ -45,6 +45,6 @@ func (p *App) Start() {
 		rootGroup.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	logrus.Println("My ChatGPT 启动成功")
+	logrus.Println("My ChatGPT 启动成功...")
 	p.Server.Run(":9090")
 }

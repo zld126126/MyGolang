@@ -7,7 +7,7 @@ import (
 )
 
 // LoadTemplate 执行命令: go-assets-builder templates -o assets.go -p app
-func LoadTemplate() (*template.Template, error) {
+func (p *App) LoadTemplate() (*template.Template, error) {
 	t := template.New("")
 	for name, file := range Assets.Files {
 		// 可以用.tmpl .html
